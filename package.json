@@ -1,0 +1,11 @@
+{
+  "name": "tic-tac-toe",
+  "version": "0.1.0",
+  "description": "Tic-tac-toe",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "The Blue Group",
+  "license": "MIT"
+}
