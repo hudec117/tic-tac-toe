@@ -7,6 +7,11 @@
         <style>
             .container {
                 display: flex;
+                flex-direction: column;
+            }
+
+            .row {
+                display: flex;
                 flex-direction: row;
             }
 
@@ -27,7 +32,7 @@
             <div class="row" v-for="row of board">
                 <div class="cell" v-for="cell of row" v-on:click="onCellClick(cell)">
                     <img v-if="cell.value === 'X'" src="img/cross.png" />
-                    <img v-if="cell.value === 'O'" src="img\nought.png" />
+                    <img v-if="cell.value === 'O'" src="img/nought.png" />
                 </div>
             </div>
         </div>
@@ -38,6 +43,7 @@
                 data: {
                     width: 3,
                     height: 3,
+                    match: 3,
                     turn: "X",
                     board: []
                 },
@@ -48,11 +54,7 @@
                     buildBoard: function () {
                         for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
                             const row = [];
-                            for (
-                                let columnIndex = 0;
-                                columnIndex < this.width;
-                                columnIndex++
-                            ) {
+                            for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
                                 row.push({
                                     row: rowIndex,
                                     column: columnIndex,
@@ -79,8 +81,38 @@
                     },
                     whoWon: function () {
                         // Check columns
+                        for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
+                            let x = 0;
+                            let o = 0;
+                            for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
+                                if (this.board[rowIndex][columnIndex].value === "X")
+                                    x++;
+                                if (this.board[rowIndex][columnIndex].value === "O")
+                                    o++;
+                            }
+
+                            if (x === this.match)
+                                return "X";
+                            else if (o === this.match)
+                                return "O";
+                        }
 
                         // Check rows
+                        for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
+                            let x = 0;
+                            let o = 0;
+                            for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
+                                if (this.board[rowIndex][columnIndex].value === "X")
+                                    x++;
+                                if (this.board[rowIndex][columnIndex].value === "O")
+                                    o++;
+                            }
+
+                            if (x === this.match)
+                                return "X";
+                            else if (o === this.match)
+                                return "O";
+                        }
 
                         // Check top-left to bottom-right diagonal
                         if (this.board[0][0].value === "X" && this.board[1][1].value === "X" && this.board[2][2].value === "X")
