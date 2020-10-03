@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Tic Tac Toe</title>
+        <style>
+            .container {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .cell {
+                width: 100px;
+                height: 100px;
+                border: 1px solid black;
+            }
+
+            .cell img {
+                width: inherit;
+                height: inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app" class="container">
+            <div class="row" v-for="row of board">
+                <div class="cell" v-for="cell of row" v-on:click="onCellClick(cell)">
+                    <img v-if="cell.value === 'X'" src="img/cross.png" />
+                    <img v-if="cell.value === 'O'" src="img\nought.png" />
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    width: 3,
+                    height: 3,
+                    turn: "X",
+                    board: []
+                },
+                mounted: function () {
+                    this.buildBoard();
+                },
+                methods: {
+                    buildBoard: function () {
+                        for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
+                            const row = [];
+                            for (
+                                let columnIndex = 0;
+                                columnIndex < this.width;
+                                columnIndex++
+                            ) {
+                                row.push({
+                                    row: rowIndex,
+                                    column: columnIndex,
+                                    value: ""
+                                });
+                            }
+                            this.board.push(row);
+                        }
+                    },
+                    onCellClick: function (cell) {
+                        if (cell.value === "") {
+                            cell.value = this.turn;
+
+                            const won = this.whoWon();
+                            if (won !== "") {
+                                document.write(won + " wins!");
+                            } else {
+                                this.toggleTurn();
+                            }
+                        }
+                    },
+                    toggleTurn: function () {
+                        this.turn = this.turn === "X" ? "O" : "X";
+                    },
+                    whoWon: function () {
+                        // Check columns
+
+                        // Check rows
+
+                        // Check top-left to bottom-right diagonal
+                        if (this.board[0][0].value === "X" && this.board[1][1].value === "X" && this.board[2][2].value === "X")
+                            return "X";
+
+                        if (this.board[0][0].value === "O" && this.board[1][1].value === "O" && this.board[2][2].value === "O")
+                            return "O";
+
+                        // Check bottom-left to top-right diagonal
+                        if (this.board[2][0].value === "X" && this.board[1][1].value === "X" && this.board[0][2].value === "X")
+                            return "X";
+
+                        if (this.board[2][0].value === "O" && this.board[1][1].value === "O" && this.board[0][2].value === "O")
+                            return "O";
+
+                        return "";
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
