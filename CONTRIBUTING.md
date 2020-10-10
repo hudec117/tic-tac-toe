@@ -6,7 +6,7 @@
 - [git](https://git-scm.com/downloads)
   - Install with Credential Manager to simplify authentication
 
-## Optional but recommend software
+## Optional but recommended software
 
 - [VS Code](https://code.visualstudio.com/)
   - Extensions: ESLint
@@ -21,13 +21,6 @@
   - It will create a folder for the project so no need to create a new folder.
 6. On the bottom right you'll be prompted to open the repository, click "Open"
 
-## Creating branches
-
-1. On the bottom left of VS Code you will most likely see the Version Control symbol with "master" next to it.
-2. When you click on it you will be prompted to select another branch or create a new one.
-3. Click "Create new branch..." and enter a name.
-4. On the bottom left, you will now see the name of your branch.
-
 ## Folder Structure
 
 - `.vscode` is where configuration regarding VS code is stored. This is automatically used by VS Code when you open the project.
@@ -41,6 +34,13 @@
 - `feature/<feature>` will be used for feature branches.
 
 Merging between the above branches will be done exclusively using Pull Requests on GitHub.
+
+## Creating branches
+
+1. On the bottom left of VS Code you will most likely see the Version Control symbol with "master" next to it.
+2. When you click on it you will be prompted to select another branch or create a new one.
+3. Click "Create new branch..." and enter a name.
+4. On the bottom left, you will now see the name of your branch.
 
 ## Resources
 - [Git Concepts & Workflows](https://livecodestream.dev/post/2020-08-21-git-concepts-and-workflow-for-beginners/)
