@@ -36,100 +36,33 @@
                 </div>
             </div>
             <p>Turn: {{ turn }}</p>
+            <p v-if="won !== ''">{{ won }} wins!</p>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script>
             new Vue({
                 el: "#app",
                 data: {
-                    width: 3,
-                    height: 3,
-                    match: 3,
-                    turn: "X",
+                    socket: null,
+                    won: '',
+                    turn: '',
                     board: []
                 },
                 mounted: function () {
-                    this.buildBoard();
+                    this.socket = io();
+                    this.socket.on('state', this.onState);
                 },
                 methods: {
-                    buildBoard: function () {
-                        for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
-                            const row = [];
-                            for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
-                                row.push({
-                                    row: rowIndex,
-                                    column: columnIndex,
-                                    value: ""
-                                });
-                            }
-                            this.board.push(row);
-                        }
+                    onState: function(state) {
+                        this.board = state.board;
+                        this.turn = state.turn;
+                        this.won = state.won;
                     },
                     onCellClick: function (cell) {
-                        if (cell.value === "") {
-                            cell.value = this.turn;
-
-                            const won = this.whoWon();
-                            if (won !== "") {
-                                document.write(won + " wins!");
-                            } else {
-                                this.toggleTurn();
-                            }
+                        if (cell.value === '') {
+                            this.socket.emit('turn', cell);
                         }
-                    },
-                    toggleTurn: function () {
-                        this.turn = this.turn === "X" ? "O" : "X";
-                    },
-                    whoWon: function () {
-                        // Check columns
-                        for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
-                            let x = 0;
-                            let o = 0;
-                            for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
-                                if (this.board[rowIndex][columnIndex].value === "X")
-                                    x++;
-                                if (this.board[rowIndex][columnIndex].value === "O")
-                                    o++;
-                            }
-
-                            if (x === this.match)
-                                return "X";
-                            else if (o === this.match)
-                                return "O";
-                        }
-
-                        // Check rows
-                        for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
-                            let x = 0;
-                            let o = 0;
-                            for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
-                                if (this.board[rowIndex][columnIndex].value === "X")
-                                    x++;
-                                if (this.board[rowIndex][columnIndex].value === "O")
-                                    o++;
-                            }
-
-                            if (x === this.match)
-                                return "X";
-                            else if (o === this.match)
-                                return "O";
-                        }
-
-                        // Check top-left to bottom-right diagonal
-                        if (this.board[0][0].value === "X" && this.board[1][1].value === "X" && this.board[2][2].value === "X")
-                            return "X";
-
-                        if (this.board[0][0].value === "O" && this.board[1][1].value === "O" && this.board[2][2].value === "O")
-                            return "O";
-
-                        // Check bottom-left to top-right diagonal
-                        if (this.board[2][0].value === "X" && this.board[1][1].value === "X" && this.board[0][2].value === "X")
-                            return "X";
-
-                        if (this.board[2][0].value === "O" && this.board[1][1].value === "O" && this.board[0][2].value === "O")
-                            return "O";
-
-                        return "";
                     }
                 }
             });
