@@ -7,14 +7,14 @@ assignees: ''
 
 ---
 
-# User story
-As a ..., I want to ..., so I can ...
+# User Story
+As a ..., I want to ..., so I can ... .
 
-## Acceptance criteria
+## Acceptance Criteria
 
 - [ ] This is something that can be verified to show that this user story is satisfied.
 
-## Sprint Ready Checklist 
+## Sprint Ready Checklist
 1. - [ ] Acceptance criteria defined
 2. - [ ] Team understands acceptance criteria
 3. - [ ] Team has defined solution / steps to satisfy acceptance criteria
