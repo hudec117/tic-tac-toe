@@ -2,10 +2,15 @@
   "name": "tic-tac-toe",
   "version": "0.1.0",
   "description": "Tic-tac-toe",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "The Blue Group",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "random-js": "^2.1.0",
+    "socket.io": "^2.3.0"
+  }
 }
