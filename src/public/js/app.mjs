@@ -6,7 +6,7 @@ import Game from './pages/game.mjs';
 export default {
     name: 'App',
     template: /*html*/`
-        <div class="container-fluid">
+        <div class="container">
             <main-menu v-if="page === 'MainMenu'"></main-menu>
             <settings v-if="page === 'Settings'"></settings>
             <board-select v-if="page === 'BoardSelect'"></board-select>
