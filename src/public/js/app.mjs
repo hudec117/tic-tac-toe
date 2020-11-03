@@ -19,12 +19,9 @@ export default {
         BoardSelect,
         Game
     },
-    data: function() {
-        return {
-            page: 'MainMenu'
-        };
-    },
-    mounted: function() {
-        
+    computed: {
+        page: function() {
+            return this.$store.state.page;
+        }
     }
 };
