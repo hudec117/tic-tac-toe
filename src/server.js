@@ -2,8 +2,13 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+
 const port = process.env.PORT || 3000;
 
+// Start game server
+new (require('./services/game-server.js'))(io);
+
+// Expose "public" folder as static content.
 app.use(express.static(__dirname + '/public'));
 
 http.listen(port, () => {
