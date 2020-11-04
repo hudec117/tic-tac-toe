@@ -1,4 +1,4 @@
-const Game = require('../services/game.js');
+const Game = require('./game.js');
 
 const dummyId = '9fd2ea08c96d45f5';
 const dummyId2 = '561223e1fcbe451d';
