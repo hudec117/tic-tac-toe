@@ -9,12 +9,22 @@ export default {
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-primary">3x3 Board</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            v-on:click="on3x3Click"
+                            v-bind:disabled="creatingGame">
+                        3x3 Board
+                    </button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-primary">4x4 Board</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            v-on:click="on4x4Click"
+                            v-bind:disabled="creatingGame">
+                        4x4 Board
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -28,15 +38,32 @@ export default {
     `,
     data: function() {
         return {
-            
+            creatingGame: false
         };
     },
-    mounted: function() {
-        
-    },
     methods: {
+        on3x3Click: function() {
+            this.createGame(3);
+        },
+        on4x4Click: function() {
+            this.createGame(4);
+        },
         onBackClick: function() {
             this.$store.commit('setPage', 'MainMenu');
+        },
+        createGame: function(size) {
+            this.creatingGame = true;
+
+            this.$io.emit('create_game', {
+                size: size
+            }, res => {
+                if (res.success) {
+                    this.$store.commit('setPage', 'Game');
+                } else {
+                    this.creatingGame = false;
+                    // TODO: handle
+                }
+            });
         }
     }
 };

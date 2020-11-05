@@ -19,7 +19,7 @@ export default {
             </div>
             <div class="row">
                 <div class="col">
-                    <button type="button" class="btn btn-secondary">
+                    <button type="button" class="btn btn-secondary" disabled>
                         Settings
                         <i class="fas fa-tools ml-1"></i>
                     </button>
