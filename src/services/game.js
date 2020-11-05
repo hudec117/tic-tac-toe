@@ -13,7 +13,7 @@ class Game {
 
     _generateGameId() {
         const random = new Random();
-        return random.integer(10000, 99999);
+        return random.integer(10000, 99999).toString();
     }
 
     addPlayer(id) {
