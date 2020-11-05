@@ -1,7 +1,7 @@
 const GameBoardGenerator = require('./game-board-generator.js');
 
 describe('generate', () => {
-    test('given size size 3, generates board of 3 wide and 3 high', () => {
+    test('given size 3, generates board 3 wide and 3 high', () => {
         const generator = new GameBoardGenerator({
             size: 3
         });
@@ -12,7 +12,7 @@ describe('generate', () => {
         expect(board[0].length).toBe(3);
     });
 
-    test('given size size 4, generates board of 4 wide and 4 high', () => {
+    test('given size 4, generates board 4 wide and 4 high', () => {
         const generator = new GameBoardGenerator({
             size: 4
         });
