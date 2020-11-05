@@ -23,5 +23,8 @@ export default {
         page: function() {
             return this.$store.state.page;
         }
+    },
+    mounted: function() {
+        Vue.prototype.$io = io();
     }
 };
