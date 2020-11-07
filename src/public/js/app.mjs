@@ -26,5 +26,27 @@ export default {
     },
     mounted: function() {
         Vue.prototype.$io = io();
+
+        this.tryJoinGame();
+    },
+    methods: {
+        tryJoinGame: function() {
+            // Check if a game ID is present.
+            const gameId = window.location.hash.substr(1);
+            if (gameId) {
+                // Remove game ID fragment from URL
+                window.location.replace("#");
+                history.replaceState({}, '', window.location.href.slice(0, -1));
+
+                this.$io.emit('join_game', gameId, res => {
+                    if (res.success) {
+                        this.$store.commit('setGame', res.game);
+                        this.$store.commit('setPage', 'Game');
+                    } else {
+                        // TODO: handle
+                    }
+                });
+            }
+        }
     }
 };

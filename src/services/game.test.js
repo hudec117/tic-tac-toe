@@ -20,40 +20,17 @@ describe('constructor', () => {
 });
 
 describe('addPlayer', () => {
-    test('returns true if nought is empty', () => {
-        game.nought = '';
+    test('returns true if piece is available', () => {
         expect(game.addPlayer(dummyId)).toBe(true);
     });
 
-    test('returns true if cross is empty', () => {
-        game.cross = '';
-        expect(game.addPlayer(dummyId)).toBe(true);
-    });
-
-    test('returns false if nought and cross are populated', () => {
-        game.nought = '6c188c0334924a7';
-        game.cross = '75a38654eecc4b7a';
+    test('returns false if no pieces available', () => {
+        game.availablePieces = [];
         expect(game.addPlayer(dummyId)).toBe(false);
     });
 
-    test('returns false is ID is already in nought', () => {
-        game.nought = dummyId;
+    test('returns false is ID is already in players', () => {
+        game.players[dummyId] = 'O';
         expect(game.addPlayer(dummyId)).toBe(false);
-    });
-
-    test('returns false is ID is already in cross', () => {
-        game.cross = dummyId;
-        expect(game.addPlayer(dummyId)).toBe(false);
-    });
-
-    test('first call, assigns ID to nought', () => {
-        game.addPlayer(dummyId);
-        expect(game.nought).toBe(dummyId);
-    });
-
-    test('second call, assigns ID to cross', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
-        expect(game.cross).toBe(dummyId2);
     });
 });

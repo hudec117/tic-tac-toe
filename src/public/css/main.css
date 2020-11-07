@@ -1,0 +1,27 @@
+.cell {
+    height: 20vh;
+    width: 20vh;
+    background: white;
+    margin: .25rem;
+}
+
+.cell:hover {
+    outline: 3px solid #1E90FF;
+    cursor: pointer;
+}
+
+.row:first-child > .cell {
+    margin-top: 0;
+}
+
+.row:last-child > .cell {
+    margin-bottom: 0;
+}
+
+.row > .cell:first-child {
+    margin-left: 0;
+}
+
+.row > .cell:last-child {
+    margin-right: 0;
+}

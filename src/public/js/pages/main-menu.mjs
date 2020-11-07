@@ -4,7 +4,7 @@ export default {
         <div class="text-center">
             <div class="row my-4">
                 <div class="col">
-                    <h1 class="display-3">Tic-Tac-Toe</h1>
+                    <h1 class="display-6">Tic-Tac-Toe</h1>
                 </div>
             </div>
             <div class="row mb-3">
@@ -31,9 +31,6 @@ export default {
         return {
             
         };
-    },
-    mounted: function() {
-        
     },
     methods: {
         onPlayOnlineClick: function() {
