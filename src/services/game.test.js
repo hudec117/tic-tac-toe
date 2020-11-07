@@ -1,7 +1,6 @@
 const Game = require('./game.js');
 
 const dummyId = '9fd2ea08c96d45f5';
-const dummyId2 = '561223e1fcbe451d';
 
 const config = {
     size: 3
@@ -34,3 +33,9 @@ describe('addPlayer', () => {
         expect(game.addPlayer(dummyId)).toBe(false);
     });
 });
+
+// describe('takeTurn', () => {
+//     test('', () => {
+
+//     });
+// });

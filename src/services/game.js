@@ -1,4 +1,4 @@
-const GameBoardGenerator = require('./game-board-generator.js');
+const GameBoard = require('./game-board.js');
 const Random = require('random-js').Random;
 
 const SUPPORTED_PIECES = ['X', 'O'];
@@ -10,8 +10,7 @@ class Game {
         this.players = {};
         this.turn = this._generateRandomPiece();
 
-        const boardGenerator = new GameBoardGenerator(config);
-        this.board = boardGenerator.generate();
+        this.board = new GameBoard(config);
     }
 
     _generateGameId() {
@@ -24,18 +23,50 @@ class Game {
         return this.availablePieces[random.integer(0, this.availablePieces.length - 1)];
     }
 
-    addPlayer(id) {
-        if (this.availablePieces.length === 0 || id in this.players) {
+    addPlayer(playerId) {
+        if (this.availablePieces.length === 0 || this.hasPlayer(playerId)) {
             return false;
         }
 
         const nextPiece = this._generateRandomPiece();
 
-        this.players[id] = nextPiece;
+        this.players[playerId] = nextPiece;
 
         this.availablePieces = this.availablePieces.filter(piece => piece !== nextPiece);
 
         return true;
+    }
+
+    hasPlayer(playerId) {
+        return playerId in this.players;
+    }
+
+    takeTurn(playerId, cellId) {
+        const playerPiece = this.players[playerId];
+        if (playerPiece !== this.turn) {
+            return false;
+        }
+
+        const cell = this.board.getCell(cellId);
+
+        cell.type = this.turn;
+
+        if (this.turn === 'X') {
+            this.turn = 'O';
+        } else {
+            this.turn = 'X';
+        }
+
+        return true;
+    }
+
+    toPublicObject() {
+        return {
+            id: this.id,
+            players: this.players,
+            turn: this.turn,
+            board: this.board.toPublicObject()
+        };
     }
 }
 

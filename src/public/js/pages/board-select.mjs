@@ -58,7 +58,6 @@ export default {
                 size: size
             }, res => {
                 if (res.success) {
-                    this.$store.commit('setGame', res.game);
                     this.$store.commit('setPage', 'Game');
                 } else {
                     this.creatingGame = false;

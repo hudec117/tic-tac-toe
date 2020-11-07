@@ -1,13 +1,23 @@
 .cell {
-    height: 20vh;
-    width: 20vh;
+    height: 15vh;
+    width: 15vh;
     background: white;
     margin: .25rem;
 }
 
-.cell:hover {
+.cell-active:hover {
     outline: 3px solid #1E90FF;
     cursor: pointer;
+}
+
+.cell-inactive {
+    background: #d8d8d8;
+    cursor: not-allowed;
+}
+
+.cell img {
+    width: inherit;
+    height: inherit;
 }
 
 .row:first-child > .cell {
