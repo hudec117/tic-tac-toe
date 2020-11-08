@@ -9,13 +9,13 @@ export default {
             </div>
             <div class="row justify-content-center mb-3">
                 <div class="col-auto form-inline">
-                    <button type="button" class="btn btn-danger mr-2">
+                    <button type="button" class="btn btn-danger mr-3">
                         <i class="fas fa-arrow-left"></i> End Game
                     </button>
 
                     <label for="inviteLink" class="mr-1">Invite Link</label>
                     <input id="inviteLink"
-                           class="form-control mr-2"
+                           class="form-control mr-3"
                            type="text"
                            v-bind:value="inviteLink"
                            v-on:click="onInviteLinkClick"
@@ -50,20 +50,26 @@ export default {
         inviteLink: function() {
             return `${window.location.href}#${this.$store.state.game.id}`;
         },
+        gameHasStarted: function() {
+            return this.$store.state.game.state === 'playing';
+        },
         isPlayerTurn: function() {
-            const playerPiece = this.$store.state.game.players[this.$io.id];
-            const turnPiece = this.$store.state.game.turn;
-            return playerPiece === turnPiece;
+            return this.$io.id === this.$store.state.game.turn;
+        },
+        canTakeTurn: function() {
+            return this.gameHasStarted && this.isPlayerTurn;
         },
         turnInfo: function() {
-            if (this.isPlayerTurn) {
+            if (!this.gameHasStarted) {
+                return 'Waiting for opponent';
+            } else if (this.isPlayerTurn) {
                 return `Yours`;
             } else {
                 return `Opponent's`;
             }
         },
         cellClasses: function() {
-            return this.isPlayerTurn ? 'cell cell-active' : 'cell cell-inactive';
+            return this.canTakeTurn ? 'cell cell-active' : 'cell cell-inactive';
         }
     },
     methods: {

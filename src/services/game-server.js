@@ -106,7 +106,6 @@ class GameServer {
     }
 
     _broadcastGameToRoom(game) {
-        console.log('Broadcasting to ' + game.id);
         this._io.in(game.id).emit('update_game', game.toPublicObject());
     }
 
