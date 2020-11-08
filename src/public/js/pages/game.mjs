@@ -9,27 +9,31 @@ export default {
             </div>
             <div class="row justify-content-center mb-3">
                 <div class="col-auto form-inline">
-                    <button type="button" class="btn btn-danger mr-2">
+                    <button type="button" class="btn btn-danger mr-3">
                         <i class="fas fa-arrow-left"></i> End Game
                     </button>
 
                     <label for="inviteLink" class="mr-1">Invite Link</label>
                     <input id="inviteLink"
-                           class="form-control mr-2"
+                           class="form-control mr-3"
                            type="text"
                            v-bind:value="inviteLink"
                            v-on:click="onInviteLinkClick"
                            readonly>
 
-                    <label for="playerType" class="mr-1">Turn</label>
-                    <input type="text" class="form-control" id="playerType" v-bind:value="turn" readonly>
+                    <label for="turnInfo" class="mr-1">Turn</label>
+                    <input id="turnInfo"
+                           class="form-control"
+                           type="text"
+                           v-bind:value="turnInfo"
+                           readonly>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col">
                     <div class="d-inline-flex flex-column">
                         <div class="row d-flex flex-row" v-for="row of board">
-                            <div class="cell" v-for="cell of row">
+                            <div v-bind:class="cellClasses" v-for="cell of row" v-on:click="onCellClick(cell)">
                                 <img v-if="cell.type === 'X'" src="img/cross.png" />
                                 <img v-if="cell.type === 'O'" src="img/nought.png" />
                             </div>
@@ -39,11 +43,6 @@ export default {
             </div>
         </div>
     `,
-    data: function() {
-        return {
-            
-        };
-    },
     computed: {
         board: function() {
             return this.$store.state.game.board;
@@ -51,19 +50,38 @@ export default {
         inviteLink: function() {
             return `${window.location.href}#${this.$store.state.game.id}`;
         },
-        turn: function() {
-            const playerPiece = this.$store.state.game.players[this.$io.id];
-            const turnPiece = this.$store.state.game.turn;
-            if (turnPiece === playerPiece) {
-                return `Yours (${turnPiece})`;
+        gameHasStarted: function() {
+            return this.$store.state.game.state === 'playing';
+        },
+        isPlayerTurn: function() {
+            return this.$io.id === this.$store.state.game.turn;
+        },
+        canTakeTurn: function() {
+            return this.gameHasStarted && this.isPlayerTurn;
+        },
+        turnInfo: function() {
+            if (!this.gameHasStarted) {
+                return 'Waiting for opponent';
+            } else if (this.isPlayerTurn) {
+                return `Yours`;
             } else {
-                return `Opponent's (${turnPiece})`;
+                return `Opponent's`;
             }
+        },
+        cellClasses: function() {
+            return this.canTakeTurn ? 'cell cell-active' : 'cell cell-inactive';
         }
     },
     methods: {
         onInviteLinkClick: function(event) {
             event.target.setSelectionRange(0, event.target.value.length);
+        },
+        onCellClick: function(cell) {
+            this.$io.emit('take_turn', cell.id, res => {
+                if (!res.success) {
+                    // TODO: handle
+                }
+            });
         }
     }
 };

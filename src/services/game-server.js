@@ -9,9 +9,10 @@ class GameServer {
     }
 
     _onClientConnect(self, socket) {
+        socket.on('disconnect', reason => self._onClientDisconnect(socket, reason));
         socket.on('create_game', (config, callback) => callback(self._onClientNewGameRequest(socket, config)));
         socket.on('join_game', (gameId, callback) => callback(self._onClientGameJoinRequest(socket, gameId)));
-        socket.on('disconnect', reason => self._onClientDisconnect(socket, reason));
+        socket.on('take_turn', (cellId, callback) => callback(self._onClientGameTakeTurn(socket, cellId)));
     }
 
     _onClientDisconnect(socket, reason) {
@@ -24,7 +25,7 @@ class GameServer {
         const playerId = socket.id;
 
         // Check if player is already in a game
-        if (this._isPlayerInGame(playerId)) {
+        if (this._getPlayersGame(playerId)) {
             return this._createFailureResponse('Player already in a game.');
         }
 
@@ -34,13 +35,13 @@ class GameServer {
 
         this._gameLookup.set(newGame.id, newGame);
 
-        // Add the socket to the game's room
+        // Add the socket to the game's room.
         socket.join(newGame.id);
 
-        return {
-            success: true,
-            game: newGame
-        };
+        // Update game for client.
+        this._broadcastGameToRoom(newGame);
+
+        return this._createSuccessResponse();
     }
 
     _onClientGameJoinRequest(socket, gameId) {
@@ -51,7 +52,7 @@ class GameServer {
 
         // Check if player is already in a game
         const playerId = socket.id;
-        if (this._isPlayerInGame(playerId)) {
+        if (this._getPlayersGame(playerId)) {
             return this._createFailureResponse('Player already in a game.');
         }
 
@@ -69,20 +70,49 @@ class GameServer {
         // Add the socket to the game's room
         socket.join(game.id);
 
-        return {
-            success: true,
-            game: game
-        };
+        // Broadcast the game to everyone in the room.
+        this._broadcastGameToRoom(game);
+
+        return this._createSuccessResponse();
     }
 
-    _isPlayerInGame(playerId) {
+    _onClientGameTakeTurn(socket, cellId) {
+        // TODO: argument defense
+
+        const playerId = socket.id;
+
+        // Find the player's game
+        const game = this._getPlayersGame(playerId);
+        if (!game) {
+            return this._createFailureResponse('Player is not in a game.');
+        }
+
+        if (game.takeTurn(playerId, cellId)) {
+            this._broadcastGameToRoom(game);
+            return this._createSuccessResponse();
+        } else {
+            return this._createFailureResponse('Player cannot take turn.');
+        }
+    }
+
+    _getPlayersGame(playerId) {
         for (const game of this._gameLookup.values()) {
-            if (game.nought === playerId || game.cross === playerId) {
-                return true;
+            if (game.hasPlayer(playerId)) {
+                return game;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    _broadcastGameToRoom(game) {
+        this._io.in(game.id).emit('update_game', game.toPublicObject());
+    }
+
+    _createSuccessResponse() {
+        return {
+            success: true
+        };
     }
 
     _createFailureResponse(message) {

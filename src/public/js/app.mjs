@@ -25,7 +25,10 @@ export default {
         }
     },
     mounted: function() {
-        Vue.prototype.$io = io();
+        const socket = io();
+        socket.on('update_game', this.onUpdateGame);
+
+        Vue.prototype.$io = socket;
 
         this.tryJoinGame();
     },
@@ -40,13 +43,15 @@ export default {
 
                 this.$io.emit('join_game', gameId, res => {
                     if (res.success) {
-                        this.$store.commit('setGame', res.game);
                         this.$store.commit('setPage', 'Game');
                     } else {
                         // TODO: handle
                     }
                 });
             }
+        },
+        onUpdateGame: function(game) {
+            this.$store.commit('setGame', game);
         }
     }
 };
