@@ -28,8 +28,12 @@ class GameBoard {
         }
     }
 
-    getCell(id) {
+    getCellById(id) {
         return this._cellLookup.get(id);
+    }
+
+    getCellByCoords(row, column) {
+        return this.rows[row][column];
     }
 
     toPublicObject() {
