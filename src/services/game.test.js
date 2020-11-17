@@ -7,10 +7,10 @@ const dummyId3 = 'a0864877';
 const config = {
     size: 3
 };
-let game;
+let threePlayerGame;
 
 beforeEach(() => {
-    game = new Game(config);
+    threePlayerGame = new Game(config);
 });
 
 describe('constructor', () => {
@@ -32,44 +32,44 @@ describe('constructor', () => {
 describe('addPlayer', () => {
     test('returns true if piece is available', () => {
         // Act
-        const success = game.addPlayer(dummyId);
+        const success = threePlayerGame.addPlayer(dummyId);
 
         expect(success).toBe(true);
     });
 
     test('returns false if player is already added', () => {
-        game.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId);
 
         // Act
-        const success = game.addPlayer(dummyId);
+        const success = threePlayerGame.addPlayer(dummyId);
 
         expect(success).toBe(false);
     });
 
     test('sets state to playing when all players have joined', () => {
-        game.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId);
 
         // Act
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId2);
 
-        expect(game.state).toBe('playing');
+        expect(threePlayerGame.state).toBe('playing');
     });
 
     test('sets turn to a player when all players have joined', () => {
-        game.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId);
 
         // Act
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId2);
 
-        expect(game.turn).not.toBe('');
+        expect(threePlayerGame.turn).not.toBe('');
     });
 
     test('returns false if adding player when game is playing', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
         // Act
-        const success = game.addPlayer(dummyId3);
+        const success = threePlayerGame.addPlayer(dummyId3);
 
         expect(success).toBe(false);
     });
@@ -78,26 +78,26 @@ describe('addPlayer', () => {
 describe('hasPlayer', () => {
     test('no players, returns false', () => {
         // Act
-        const hasPlayer = game.hasPlayer(dummyId);
+        const hasPlayer = threePlayerGame.hasPlayer(dummyId);
 
         expect(hasPlayer).toBe(false);
     });
 
     test('player in game, returns true', () => {
-        game.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId);
 
         // Act
-        const hasPlayer = game.hasPlayer(dummyId)
+        const hasPlayer = threePlayerGame.hasPlayer(dummyId)
 
         expect(hasPlayer).toBe(true);
     });
 
     test('player not in game, returns false', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
         // Act
-        const hasPlayer = game.hasPlayer(dummyId3)
+        const hasPlayer = threePlayerGame.hasPlayer(dummyId3)
 
         expect(hasPlayer).toBe(false);
     });
@@ -105,77 +105,226 @@ describe('hasPlayer', () => {
 
 describe('takeTurn', () => {
     test('returns true if player\'s turn', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
-        const cellId = game.board.rows[0][0].id;
+        const cellId = threePlayerGame.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId, cellId);
+        const success = threePlayerGame.takeTurn(dummyId, cellId);
 
         expect(success).toBe(true);
     });
 
     test('returns false if not player\'s turn', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
-        const cellId = game.board.rows[0][0].id;
+        const cellId = threePlayerGame.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId2, cellId);
+        const success = threePlayerGame.takeTurn(dummyId2, cellId);
 
         expect(success).toBe(false);
     });
 
     test('returns false if player not in game', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
-        const cellId = game.board.rows[0][0].id;
+        const cellId = threePlayerGame.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId3, cellId);
+        const success = threePlayerGame.takeTurn(dummyId3, cellId);
 
         expect(success).toBe(false);
     });
 
     test('returns false if state is waiting', () => {
-        game.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId);
 
-        const cellId = game.board.rows[0][0].id;
+        const cellId = threePlayerGame.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId, cellId);
+        const success = threePlayerGame.takeTurn(dummyId, cellId);
 
         expect(success).toBe(false);
     });
 
     test('toggles the turn to other player', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
-        const previousTurn = game.turn;
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
+        const previousTurn = threePlayerGame.turn;
 
-        const cellId = game.board.rows[0][0].id;
+        const cellId = threePlayerGame.board.rows[0][0].id;
 
         // Act
-        game.takeTurn(game.turn, cellId);
+        threePlayerGame.takeTurn(threePlayerGame.turn, cellId);
 
-        expect(game.turn).not.toBe(previousTurn);
+        expect(threePlayerGame.turn).not.toBe(previousTurn);
     });
 
-    test('sets the cells type to the player\'s piece', () => {
-        game.addPlayer(dummyId);
-        game.addPlayer(dummyId2);
+    test('sets the cell\'s value to the player\'s piece', () => {
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
 
-        const cell = game.board.rows[0][0];
+        const cell = threePlayerGame.board.rows[0][0];
 
-        const nextPlayer = game.turn;
+        const nextPlayer = threePlayerGame.turn;
 
         // Act
-        game.takeTurn(nextPlayer, cell.id);
+        threePlayerGame.takeTurn(nextPlayer, cell.id);
 
-        const playerPiece = game.toPublicObject().players[nextPlayer];
-        expect(cell.type).toBe(playerPiece);
+        expect(cell.value).toBe(nextPlayer);
+    });
+});
+
+describe('whoWon', () => {
+    test('player matches 3 in a column, returns player ID', () => {
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
+
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][0].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[0][2].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[1][0].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[1][2].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[2][0].id);
+
+        // Act
+        const playerId = threePlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 3 in a row, returns player ID', () => {
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
+
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][0].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[2][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][1].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[1][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][2].id);
+
+        // Act
+        const playerId = threePlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 3 from top-left to bottom-right diagonal, returns player ID', () => {
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
+
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][0].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[2][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[1][1].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[1][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[2][2].id);
+
+        // Act
+        const playerId = threePlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 3 from bottom-left to top-right diagonal, returns player ID', () => {
+        threePlayerGame.addPlayer(dummyId);
+        threePlayerGame.addPlayer(dummyId2);
+
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[2][0].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[0][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[1][1].id);
+        threePlayerGame.takeTurn(dummyId2, threePlayerGame.board.rows[1][0].id);
+        threePlayerGame.takeTurn(dummyId, threePlayerGame.board.rows[0][2].id);
+
+        // Act
+        const playerId = threePlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 4 in a column, returns player ID', () => {
+        const fourPlayerGame = new Game({
+            size: 4
+        });
+        fourPlayerGame.addPlayer(dummyId);
+        fourPlayerGame.addPlayer(dummyId2);
+
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[0][3].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[1][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[1][3].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[2][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[2][3].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[3][0].id);
+
+        // Act
+        const playerId = fourPlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 4 in a row, returns player ID', () => {
+        const fourPlayerGame = new Game({
+            size: 4
+        });
+        fourPlayerGame.addPlayer(dummyId);
+        fourPlayerGame.addPlayer(dummyId2);
+
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][0].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][1].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][1].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][2].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][2].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][3].id);
+
+        // Act
+        const playerId = fourPlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 4 from top-left to bottom-right diagonal, returns player ID', () => {
+        const fourPlayerGame = new Game({
+            size: 4
+        });
+        fourPlayerGame.addPlayer(dummyId);
+        fourPlayerGame.addPlayer(dummyId2);
+
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][0].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[1][1].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[2][0].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[2][2].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][1].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[3][3].id);
+
+        // Act
+        const playerId = fourPlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
+    });
+
+    test('player matches 4 from bottom-left to top-right diagonal, returns player ID', () => {
+        const fourPlayerGame = new Game({
+            size: 4
+        });
+        fourPlayerGame.addPlayer(dummyId);
+        fourPlayerGame.addPlayer(dummyId2);
+
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[3][0].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][2].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[2][1].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[3][3].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[1][2].id);
+        fourPlayerGame.takeTurn(dummyId2, fourPlayerGame.board.rows[2][3].id);
+        fourPlayerGame.takeTurn(dummyId, fourPlayerGame.board.rows[0][3].id);
+
+        // Act
+        const playerId = fourPlayerGame.whoWon();
+
+        expect(playerId).toBe(dummyId);
     });
 });

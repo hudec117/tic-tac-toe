@@ -1,7 +1,7 @@
 .cell {
     height: 15vh;
     width: 15vh;
-    background: white;
+    outline: 3px solid black;
     margin: .25rem;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .cell-inactive {
-    background: #d8d8d8;
+    outline: 3px solid #cecece;
 }
 
 .cell img {

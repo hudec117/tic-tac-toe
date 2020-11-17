@@ -9,8 +9,8 @@ export default {
         <div class="container">
             <main-menu v-if="page === 'MainMenu'"></main-menu>
             <settings v-if="page === 'Settings'"></settings>
-            <board-select v-if="page === 'BoardSelect'"></board-select>
-            <game v-if="page === 'Game'"></game>
+            <board-select v-if="page === 'BoardSelect'" v-on:selected="onBoardSelected"></board-select>
+            <game v-if="page === 'Game'" v-bind:initial-game="initialGame"></game>
         </div>
     `,
     components: {
@@ -19,21 +19,35 @@ export default {
         BoardSelect,
         Game
     },
+    data: function() {
+        return {
+            initialGame: {}
+        };
+    },
     computed: {
         page: function() {
             return this.$store.state.page;
         }
     },
     mounted: function() {
-        const socket = io();
-        socket.on('update_game', this.onUpdateGame);
+        Vue.prototype.$io = io();
 
-        Vue.prototype.$io = socket;
-
-        this.tryJoinGame();
+        this.tryJoinGameWithId();
     },
     methods: {
-        tryJoinGame: function() {
+        onBoardSelected: function(size) {
+            this.$io.emit('game-create', {
+                size: size
+            }, res => {
+                if (res.success) {
+                    this.initialGame = res.game;
+                    this.$store.commit('setPage', 'Game');
+                } else {
+                    // TODO: handle
+                }
+            });
+        },
+        tryJoinGameWithId: function() {
             // Check if a game ID is present.
             const gameId = window.location.hash.substr(1);
             if (gameId) {
@@ -41,17 +55,15 @@ export default {
                 window.location.replace("#");
                 history.replaceState({}, '', window.location.href.slice(0, -1));
 
-                this.$io.emit('join_game', gameId, res => {
+                this.$io.emit('game-join', gameId, res => {
                     if (res.success) {
+                        this.initialGame = res.game;
                         this.$store.commit('setPage', 'Game');
                     } else {
                         // TODO: handle
                     }
                 });
             }
-        },
-        onUpdateGame: function(game) {
-            this.$store.commit('setGame', game);
         }
     }
 };
