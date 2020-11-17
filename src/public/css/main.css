@@ -1,0 +1,36 @@
+.cell {
+    height: 15vh;
+    width: 15vh;
+    outline: 3px solid black;
+    margin: .25rem;
+}
+
+.cell-active:hover {
+    outline: 3px solid #1E90FF;
+    cursor: pointer;
+}
+
+.cell-inactive {
+    outline: 3px solid #cecece;
+}
+
+.cell img {
+    width: inherit;
+    height: inherit;
+}
+
+.row:first-child > .cell {
+    margin-top: 0;
+}
+
+.row:last-child > .cell {
+    margin-bottom: 0;
+}
+
+.row > .cell:first-child {
+    margin-left: 0;
+}
+
+.row > .cell:last-child {
+    margin-right: 0;
+}

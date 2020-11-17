@@ -26,12 +26,13 @@
 - `.github` is where GitHub specific markdown is stored.
 - `.vscode` is where configuration regarding VS code is stored. This is automatically used by VS Code when you open the project.
 - `src` is where we will keep all the code files for the project.
+- `src/public` is where all the public-facing assets are stored such as HTML, JavaScript and images.
 
 ## Branching Strategy
 
 - `master` will represent a release-able state of the software.
-- `sprintX` will be used for sprint branches (e.g. sprint1, sprint2, sprint3)
-- `sprintX/feature` will be used for feature branches for a specific sprint (e.g. sprint1/board-size-select)
+- `sprints/X` will be used for sprint branches (e.g. sprint/1, sprint/2, sprint/3)
+- `features/feature` will be used for feature branches for a specific sprint (e.g. sprint1/board-size-select)
 
 Merging between the above branches will be done exclusively using Pull Requests on GitHub.
 

@@ -1,0 +1,10 @@
+{
+    "jest.rootPath": "src",
+    "jest.pathToJest": "npm test --",
+    "appService.defaultWebAppToDeploy": "/subscriptions/f446b886-1a08-4739-a9e8-dfe5d1363181/resourceGroups/dc2060-tic-tac-toe/providers/Microsoft.Web/sites/dc2060-tic-tac-toe",
+    "appService.deploySubpath": "src",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
+}

@@ -1,7 +1,7 @@
 export default new Vuex.Store({
     strict: true,
     state: {
-        page: 'MainMenu'
+        page: 'MainMenu',
     },
     mutations: {
         setPage(state, newPage) {
