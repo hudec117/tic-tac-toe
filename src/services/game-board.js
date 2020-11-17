@@ -17,7 +17,7 @@ class GameBoard {
                     id: uuidv4(),
                     row: rowIndex,
                     column: columnIndex,
-                    type: ''
+                    value: ''
                 };
 
                 row.push(cell);
@@ -34,6 +34,10 @@ class GameBoard {
 
     getCellByCoords(row, column) {
         return this.rows[row][column];
+    }
+
+    getCells() {
+        return this._cellLookup.values();
     }
 
     toPublicObject() {

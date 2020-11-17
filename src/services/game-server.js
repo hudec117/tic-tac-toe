@@ -57,14 +57,7 @@ class GameServer {
             return this._createFailureResponse('Player is not in a game.');
         }
 
-        // End the game
-        game.end();
-
-        // Update the game on clients
-        this._broadcastGameToRoom(game);
-
-        // Remove the game from list of games
-        this._gameLookup.delete(game.id);
+        this._cleanupGame(game);
 
         // Remove the socket from the game room
         socket.leave(game.id);
@@ -124,23 +117,42 @@ class GameServer {
             return this._createFailureResponse('Player is not in a game.');
         }
 
+        // Take the turn
         const turnSuccessful = game.takeTurn(playerId, cellId);
         if (turnSuccessful) {
-            this._broadcastGameToRoom(game);
-
             // Check if anyone has won the game
             const won = game.whoWon();
             if (won) {
-                this._io.in(game.id).emit('game-end', {
-                    reason: 'client-won',
-                    player: won
-                });
+                if (won === 'draw') {
+                    this._io.in(game.id).emit('game-end', {
+                        reason: 'client-draw'
+                    });
+                } else {
+                    this._io.in(game.id).emit('game-end', {
+                        reason: 'client-won',
+                        player: won
+                    });
+                }
+
+                this._cleanupGame(game);
             }
+
+            this._broadcastGameToRoom(game);
 
             return this._createSuccessResponse();
         } else {
             return this._createFailureResponse('Player cannot take turn.');
         }
+    }
+
+    _cleanupGame(game) {
+        this._gameLookup.delete(game.id);
+
+        // TODO: handle socket cleanup
+        // const sockets = this._io.sockets.adapter.rooms[game.id].sockets;
+        // for (const socket in sockets) {
+            
+        // }
     }
 
     _getPlayersGame(playerId) {

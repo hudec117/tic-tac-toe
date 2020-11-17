@@ -74,12 +74,12 @@ class Game {
     whoWon() {
         let tlTbrDiagonalMatches = [];
         let blTtrDiagonalMatches = [];
+
         for (let firstIndex = 0; firstIndex < this.board.size; firstIndex++) {
             let horizontalMatches = [];
             let verticalMatches = [];
 
             for (let secondIndex = 0; secondIndex < this.board.size; secondIndex++) {
-
                 // Check row/horizontal
                 const horizontalCell = this.board.getCellByCoords(firstIndex, secondIndex);
                 if (horizontalMatches.includes(horizontalCell.value) || secondIndex === 0) {
@@ -130,11 +130,16 @@ class Game {
             }
         }
 
-        return '';
-    }
+        // Check if the board is full, if so then it's a draw.
+        let populatedCells = 0;
+        for (const cell of this.board.getCells()) {
+            if (cell.value !== '') {
+                populatedCells++;
+            }
+        }
+        const draw = populatedCells === this.board.size * this.board.size;
 
-    end() {
-        this.state = 'ended';
+        return draw ? 'draw' : '';
     }
 
     toPublicObject() {

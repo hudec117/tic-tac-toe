@@ -164,7 +164,7 @@ describe('takeTurn', () => {
         expect(threePlayerGame.turn).not.toBe(previousTurn);
     });
 
-    test('sets the cells type to the player\'s piece', () => {
+    test('sets the cell\'s value to the player\'s piece', () => {
         threePlayerGame.addPlayer(dummyId);
         threePlayerGame.addPlayer(dummyId2);
 
@@ -326,14 +326,5 @@ describe('whoWon', () => {
         const playerId = fourPlayerGame.whoWon();
 
         expect(playerId).toBe(dummyId);
-    });
-});
-
-describe('end', () => {
-    test('sets state to ended', () => {
-        // Act
-        threePlayerGame.end();
-
-        expect(threePlayerGame.state).toBe('ended');
     });
 });
