@@ -95,7 +95,7 @@ export default {
             event.target.setSelectionRange(0, event.target.value.length);
         },
         onCellClick: function(cell) {
-            if (!cell.value) {
+            if (this.canTakeTurn && !cell.value) {
                 this.$io.emit('game-take-turn', cell.id, res => {
                     if (!res.success) {
                         this.$store.dispatch('showAlert', `Cannot take turn because: ${res.message}`);
@@ -106,10 +106,8 @@ export default {
         cellClasses: function(cell) {
             let classes = 'cell';
 
-            if (this.canTakeTurn) {
-                if (!cell.value) {
-                    classes += ' cell-active';
-                }
+            if (this.canTakeTurn && !cell.value) {
+                classes += ' cell-active';
             } else {
                 classes += ' cell-inactive';
             }

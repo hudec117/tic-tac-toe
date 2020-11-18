@@ -1,8 +1,8 @@
 export default {
     name: 'Alert',
     template: /*html*/`
-        <div v-if="visible" class="alert alert-dismissible alert-warning mb-0">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div v-if="visible" class="alert alert-warning mb-0">
+            <button type="button" class="close" v-on:click="onClose">&times;</button>
             <p class="mb-0">{{ message }}</p>
         </div>
     `,
@@ -12,6 +12,11 @@ export default {
         },
         message: function() {
             return this.$store.state.alert.message;
+        }
+    },
+    methods: {
+        onClose: function() {
+            this.$store.dispatch('hideAlert');
         }
     }
 };
