@@ -2,11 +2,6 @@ export default {
     name: 'MainMenu',
     template: /*html*/`
         <div class="text-center">
-            <div class="row my-4">
-                <div class="col">
-                    <h1 class="display-4">Tic-Tac-Toe</h1>
-                </div>
-            </div>
             <div class="row mb-3">
                 <div class="col">
                     <button type="button" class="btn btn-lg btn-primary" v-on:click="onPlayOnlineClick">Play Online</button>
@@ -34,7 +29,7 @@ export default {
     },
     methods: {
         onPlayOnlineClick: function() {
-            this.$store.commit('setPage', 'BoardSelect');
+            this.$store.dispatch('goToPage', 'BoardSelect');
         }
     }
 };

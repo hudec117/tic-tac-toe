@@ -2,11 +2,6 @@ export default {
     name: 'Game',
     template: /*html*/`
         <div>
-            <div class="row text-center my-4">
-                <div class="col">
-                    <h1 class="display-4">Tic-Tac-Toe</h1>
-                </div>
-            </div>
             <div class="row justify-content-center mb-3">
                 <div class="col-auto form-inline">
                     <button type="button"
@@ -89,11 +84,11 @@ export default {
                 window.alert('The game is a draw!');
             }
 
-            this.$store.commit('setPage', 'MainMenu');
+            this.$store.dispatch('goToPage', 'MainMenu');
         },
         onEndGameClick: function() {
             this.$io.emit('game-end', () => {
-                this.$store.commit('setPage', 'MainMenu');
+                this.$store.dispatch('goToPage', 'MainMenu');
             });
         },
         onInviteLinkClick: function(event) {
@@ -103,7 +98,7 @@ export default {
             if (!cell.value) {
                 this.$io.emit('game-take-turn', cell.id, res => {
                     if (!res.success) {
-                        // TODO: handle
+                        this.$store.dispatch('showAlert', `Cannot take turn because: ${res.message}`);
                     }
                 });
             }
