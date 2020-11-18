@@ -2,11 +2,6 @@ export default {
     name: 'BoardSelect',
     template: /*html*/`
         <div class="text-center">
-            <div class="row my-4">
-                <div class="col">
-                    <h1 class="display-4">Tic-Tac-Toe</h1>
-                </div>
-            </div>
             <div class="row mb-3">
                 <div class="col">
                     <button type="button"
@@ -42,7 +37,7 @@ export default {
             this.$emit('selected', 4);
         },
         onBackClick: function() {
-            this.$store.commit('setPage', 'MainMenu');
+            this.$store.dispatch('goToPage', 'MainMenu');
         }
     }
 };
