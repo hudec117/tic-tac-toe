@@ -49,10 +49,15 @@ export default {
             return this.$store.state.page;
         }
     },
-    mounted: function() {
+    created: function() {
         Vue.prototype.$io = io();
 
+        window.addEventListener('hashchange', this.tryJoinGameWithId);
+
         this.tryJoinGameWithId();
+    },
+    destroyed: function() {
+        window.removeEventListener('hashchange');
     },
     methods: {
         onBoardSelected: function(size) {
