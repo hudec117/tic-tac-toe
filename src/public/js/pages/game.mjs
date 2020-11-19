@@ -2,11 +2,6 @@ export default {
     name: 'Game',
     template: /*html*/`
         <div>
-            <div class="row text-center my-4">
-                <div class="col">
-                    <h1 class="display-4">Tic-Tac-Toe</h1>
-                </div>
-            </div>
             <div class="row justify-content-center mb-3">
                 <div class="col-auto form-inline">
                     <button type="button"
@@ -36,7 +31,7 @@ export default {
                 <div class="col">
                     <div class="d-inline-flex flex-column">
                         <div class="row d-flex flex-row" v-for="row of game.board">
-                            <div v-bind:class="cellClasses" v-for="cell of row" v-on:click="onCellClick(cell)">
+                            <div v-for="cell of row" v-bind:class="cellClasses(cell)" v-on:click="onCellClick(cell)">
                                 <img v-if="game.players[cell.value] === 'X'" src="img/cross.png" />
                                 <img v-if="game.players[cell.value] === 'O'" src="img/nought.png" />
                             </div>
@@ -70,12 +65,9 @@ export default {
             } else {
                 return `Opponent's turn`;
             }
-        },
-        cellClasses: function() {
-            return this.canTakeTurn ? 'cell cell-active' : 'cell cell-inactive';
         }
     },
-    mounted: function() {
+    created: function() {
         this.$io.on('game-update', this.onGameUpdate);
         this.$io.on('game-end', this.onGameEnd);
     },
@@ -92,22 +84,35 @@ export default {
                 window.alert('The game is a draw!');
             }
 
-            this.$store.commit('setPage', 'MainMenu');
+            this.$store.dispatch('goToPage', 'MainMenu');
         },
         onEndGameClick: function() {
             this.$io.emit('game-end', () => {
-                this.$store.commit('setPage', 'MainMenu');
+                this.$store.dispatch('goToPage', 'MainMenu');
             });
         },
         onInviteLinkClick: function(event) {
             event.target.setSelectionRange(0, event.target.value.length);
         },
         onCellClick: function(cell) {
-            this.$io.emit('game-take-turn', cell.id, res => {
-                if (!res.success) {
-                    // TODO: handle
-                }
-            });
+            if (this.canTakeTurn && !cell.value) {
+                this.$io.emit('game-take-turn', cell.id, res => {
+                    if (!res.success) {
+                        this.$store.dispatch('showAlert', `Cannot take turn because: ${res.message}`);
+                    }
+                });
+            }
+        },
+        cellClasses: function(cell) {
+            let classes = 'cell';
+
+            if (this.canTakeTurn && !cell.value) {
+                classes += ' cell-active';
+            } else {
+                classes += ' cell-inactive';
+            }
+
+            return classes;
         }
     }
 };
