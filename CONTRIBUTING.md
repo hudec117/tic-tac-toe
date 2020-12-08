@@ -4,14 +4,12 @@
 
 - [node](https://nodejs.org/en/)
 - [git](https://git-scm.com/downloads)
-  - Install with Credential Manager to simplify authentication
-
-## Optional but recommended software
-
+  - Install with Credential Manager Core to simplify authentication.
+- [GitHub for Windows](https://desktop.github.com/) (if you're a Git beginner)
 - [VS Code](https://code.visualstudio.com/)
-  - Extensions: ESLint
+  - Extensions: ESLint, es6-string-html
 
-## Cloning the repository
+## Cloning the repository (one-time)
 
 1. Open VS Code
 2. Click on Source Control on left sidebar (Ctrl + Shift + G)
@@ -20,6 +18,18 @@
 5. Select "hudec117/tic-tac-toe" to clone and choose a suitable location
   - It will create a folder for the project so no need to create a new folder.
 6. On the bottom right you'll be prompted to open the repository, click "Open"
+
+## Building the Project (one-time)
+
+1. In VS Code, open the terminal.
+2. Execute `cd src`
+3. Execute `npm install`
+
+## Running the Project
+
+1. In VS Code go to the "Run" tab (Ctrl + Shift + D)
+2. Make sure "Launch Program" is selected
+3. Press F5
 
 ## Folder Structure
 
