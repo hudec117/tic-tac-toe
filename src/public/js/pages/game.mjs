@@ -1,3 +1,5 @@
+import EndGameDialog from '../components/end-game-dialog.mjs';
+
 export default {
     name: 'Game',
     template: /*html*/`
@@ -8,7 +10,7 @@ export default {
                             class="btn btn-lg btn-danger mr-4"
                             v-on:click="onEndGameClick"
                             title="You will automatically lose the game">
-                        <i class="fas fa-arrow-left"></i> End Game
+                        <i class="fas fa-arrow-left mr-1"></i> End Game
                     </button>
 
                     <label for="inviteLink" class="col-form-label-lg mr-1">Invite Link</label>
@@ -39,12 +41,20 @@ export default {
                     </div>
                 </div>
             </div>
+            <end-game-dialog v-bind:show="endGameDialog.show" v-bind:message="endGameDialog.message" />
         </div>
     `,
     props: ['initialGame'],
+    components: {
+        EndGameDialog
+    },
     data: function() {
         return {
-            game: { ...this.initialGame }
+            game: { ...this.initialGame },
+            endGameDialog: {
+                show: false,
+                message: ''
+            }
         };
     },
     computed: {
@@ -77,14 +87,14 @@ export default {
         },
         onGameEnd: function(end) {
             if (end.reason === 'client-requested') {
-                window.alert('Your opponent has left the game, you automatically win!');
+                this.showEndGameDialog('Your opponent has left the game, you automatically win!');
             } else if (end.reason === 'client-won') {
-                window.alert(this.game.players[end.player] + ' wins!');
+                this.showEndGameDialog(this.game.players[end.player] + ' wins!');
             } else if (end.reason === 'client-draw') {
-                window.alert('The game is a draw!');
+                this.showEndGameDialog('The game is a draw!');
             }
 
-            this.$store.dispatch('goToPage', 'MainMenu');
+            // this.$store.dispatch('goToPage', 'MainMenu');
         },
         onEndGameClick: function() {
             this.$io.emit('game-end', () => {
@@ -102,6 +112,10 @@ export default {
                     }
                 });
             }
+        },
+        showEndGameDialog: function(message) {
+            this.endGameDialog.show = true;
+            this.endGameDialog.message = message;
         },
         cellClasses: function(cell) {
             let classes = 'cell';
