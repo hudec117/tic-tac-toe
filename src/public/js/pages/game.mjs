@@ -41,7 +41,10 @@ export default {
                     </div>
                 </div>
             </div>
-            <end-game-dialog v-bind:show="endGameDialog.show" v-bind:message="endGameDialog.message" />
+            <end-game-dialog v-bind:show="endGameDialog.show"
+                             v-bind:message="endGameDialog.message"
+                             v-on:back-to-menu="onBackToMenuClick"
+                             v-on:play-another-game="onPlayAnotherGameClick" />
         </div>
     `,
     props: ['initialGame'],
@@ -93,8 +96,6 @@ export default {
             } else if (end.reason === 'client-draw') {
                 this.showEndGameDialog('The game is a draw!');
             }
-
-            // this.$store.dispatch('goToPage', 'MainMenu');
         },
         onEndGameClick: function() {
             this.$io.emit('game-end', () => {
@@ -113,9 +114,24 @@ export default {
                 });
             }
         },
+        onBackToMenuClick: function() {
+            this.hideEndGameDialog();
+            Vue.nextTick(() => {
+                this.$store.dispatch('goToPage', 'MainMenu');
+            });
+        },
+        onPlayAnotherGameClick: function() {
+            this.hideEndGameDialog();
+
+            // TODO
+        },
         showEndGameDialog: function(message) {
             this.endGameDialog.show = true;
             this.endGameDialog.message = message;
+        },
+        hideEndGameDialog: function() {
+            this.endGameDialog.show = false;
+            this.endGameDialog.message = '';
         },
         cellClasses: function(cell) {
             let classes = 'cell';
