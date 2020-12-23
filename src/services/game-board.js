@@ -40,6 +40,14 @@ class GameBoard {
         return this._cellLookup.values();
     }
 
+    setCellValueById(id, value) {
+        this._cellLookup.get(id).value = value;
+    }
+
+    setCellValueByCoords(row, column, value) {
+        this.rows[row][column].value = value;
+    }
+
     toPublicObject() {
         return this.rows;
     }

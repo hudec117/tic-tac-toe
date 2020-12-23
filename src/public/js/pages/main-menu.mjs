@@ -9,7 +9,7 @@ export default {
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-lg btn-primary" disabled>Play Locally</button>
+                    <button type="button" class="btn btn-lg btn-primary" v-on:click="onPlayLocallyClick">Play Locally</button>
                 </div>
             </div>
             <div class="row">
@@ -22,14 +22,12 @@ export default {
             </div>
         </div>
     `,
-    data: function() {
-        return {
-            
-        };
-    },
     methods: {
         onPlayOnlineClick: function() {
-            this.$store.dispatch('goToPage', 'BoardSelect');
+            this.$emit('play-online');
+        },
+        onPlayLocallyClick: function() {
+            this.$emit('play-locally');
         }
     }
 };

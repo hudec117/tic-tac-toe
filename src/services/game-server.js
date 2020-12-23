@@ -1,4 +1,5 @@
-const Game = require('./game.js');
+const OnlineGame = require('./games/online-game.js');
+const LocalGame = require('./games/local-game.js');
 
 class GameServer {
     constructor(io) {
@@ -31,7 +32,14 @@ class GameServer {
         }
 
         // Create a new game using the configuration from the client.
-        const newGame = new Game(config);
+        let newGame;
+        if (config.type === 'online') {
+            newGame = new OnlineGame(config);
+        } else if (config.type === 'local') {
+            newGame = new LocalGame(config);
+        }
+
+        // Add the player to the game
         newGame.addPlayer(playerId);
 
         this._gameLookup.set(newGame.id, newGame);

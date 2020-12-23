@@ -25,10 +25,20 @@ export default {
 
             <!-- Each page specifies their own rows so we don't specify the following div as a Bootstrap row -->
             <div class="mt-3">
-                <main-menu v-if="page === 'MainMenu'"></main-menu>
+                <main-menu v-if="page === 'MainMenu'"
+                           v-on:play-online="onPlayOnlineClick"
+                           v-on:play-locally="onPlayLocallyClick">
+                </main-menu>
+
                 <settings v-if="page === 'Settings'"></settings>
-                <board-select v-if="page === 'BoardSelect'" v-on:selected="onBoardSelected"></board-select>
-                <game v-if="page === 'Game'" v-bind:initial-game="initialGame"></game>
+
+                <board-select v-if="page === 'BoardSelect'"
+                              v-on:selected="onBoardSelected">
+                </board-select>
+
+                <game v-if="page === 'Game'"
+                      v-bind:initial-game="initialGame">
+                </game>
             </div>
         </div>
     `,
@@ -41,7 +51,8 @@ export default {
     },
     data: function() {
         return {
-            initialGame: {}
+            initialGame: {},
+            gameType: ''
         };
     },
     computed: {
@@ -60,9 +71,18 @@ export default {
         window.removeEventListener('hashchange');
     },
     methods: {
+        onPlayOnlineClick: function() {
+            this.gameType = 'online';
+            this.$store.dispatch('goToPage', 'BoardSelect');
+        },
+        onPlayLocallyClick: function() {
+            this.gameType = 'local';
+            this.$store.dispatch('goToPage', 'BoardSelect');
+        },
         onBoardSelected: function(size) {
             this.$io.emit('game-create', {
-                size: size
+                size: size,
+                type: this.gameType
             }, res => {
                 if (res.success) {
                     this.initialGame = res.game;
