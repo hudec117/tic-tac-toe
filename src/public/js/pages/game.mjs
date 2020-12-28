@@ -13,12 +13,17 @@ export default {
                         <i class="fas fa-arrow-left mr-1"></i> End Game
                     </button>
 
-                    <label for="inviteLink" class="col-form-label-lg mr-1">Invite Link</label>
+                    <label for="inviteLink"
+                           class="col-form-label-lg mr-1"
+                           v-if="game.type === 'online'">
+                        Invite Link
+                    </label>
                     <input id="inviteLink"
                            class="form-control form-control-lg mr-4"
                            type="text"
                            v-bind:value="inviteLink"
                            v-on:click="onInviteLinkClick"
+                           v-if="game.type === 'online'"
                            readonly>
 
                     <label for="statusInfo" class="col-form-label-lg mr-1">Status</label>
@@ -34,8 +39,8 @@ export default {
                     <div class="d-inline-flex flex-column">
                         <div class="row d-flex flex-row" v-for="row of game.board">
                             <div v-for="cell of row" v-bind:class="cellClasses(cell)" v-on:click="onCellClick(cell)">
-                                <img v-if="game.players[cell.value] === 'X'" src="img/cross.png" />
-                                <img v-if="game.players[cell.value] === 'O'" src="img/nought.png" />
+                                <img v-if="cell.value === 'X'" src="img/cross.png" />
+                                <img v-if="cell.value === 'O'" src="img/nought.png" />
                             </div>
                         </div>
                     </div>
@@ -64,19 +69,30 @@ export default {
         inviteLink: function() {
             return `${window.location.href}#${this.game.id}`;
         },
+        playerPiece: function() {
+            return this.game.players[this.$io.id];
+        },
         isPlayerTurn: function() {
-            return this.$io.id === this.game.turn;
+            if (this.game.type === 'online') {
+                return this.playerPiece === this.game.turn;
+            } else if (this.game.type === 'local') {
+                return true;
+            }
         },
         canTakeTurn: function() {
             return this.game.state === 'playing' && this.isPlayerTurn;
         },
         statusInfo: function() {
-            if (this.game.state === 'waiting') {
-                return 'Waiting for opponent';
-            } else if (this.isPlayerTurn) {
-                return `Your turn`;
-            } else {
-                return `Opponent's turn`;
+            if (this.game.type === 'online') {
+                if (this.game.state === 'waiting') {
+                    return 'Waiting for opponent';
+                } else if (this.isPlayerTurn) {
+                    return 'Your turn';
+                } else {
+                    return 'Opponent\'s turn';
+                }
+            } else if (this.game.type === 'local') {
+                return `${this.game.turn}'s turn`;
             }
         }
     },
@@ -92,7 +108,7 @@ export default {
             if (end.reason === 'client-requested') {
                 this.showEndGameDialog('Your opponent has left the game, you automatically win!');
             } else if (end.reason === 'client-won') {
-                this.showEndGameDialog(this.game.players[end.player] + ' wins!');
+                this.showEndGameDialog(end.player + ' wins!');
             } else if (end.reason === 'client-draw') {
                 this.showEndGameDialog('The game is a draw!');
             }

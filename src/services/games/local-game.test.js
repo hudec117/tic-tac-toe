@@ -92,16 +92,27 @@ describe('takeTurn', () => {
         expect(success).toBe(false);
     });
 
+    test('toggles the turn to other player', () => {
+        game.addPlayer(dummyId);
+        const previousTurn = game.turn;
+
+        const cellId = game.board.rows[0][0].id;
+
+        // Act
+        game.takeTurn(dummyId, cellId);
+
+        expect(game.turn).not.toBe(previousTurn);
+    });
+
     test('sets the cell\'s value to the player\'s piece', () => {
         game.addPlayer(dummyId);
 
         const cell = game.board.rows[0][0];
-
-        const nextPlayer = game.turn;
+        const turn = game.turn;
 
         // Act
-        game.takeTurn(nextPlayer, cell.id);
+        game.takeTurn(dummyId, cell.id);
 
-        expect(cell.value).toBe(nextPlayer);
+        expect(cell.value).toBe(turn);
     });
 });

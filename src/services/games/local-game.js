@@ -29,6 +29,14 @@ class LocalGame extends Game {
             return false;
         }
 
+        this.board.setCellValueById(cellId, this.turn);
+
+        if (this.turn === 'X') {
+            this.turn = 'O';
+        } else {
+            this.turn = 'X';
+        }
+
         return true;
     }
 
