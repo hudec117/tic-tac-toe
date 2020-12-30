@@ -99,9 +99,9 @@ describe('takeTurn', () => {
         const cellId = threeGame.board.rows[0][0].id;
 
         // Act
-        const success = threeGame.takeTurn(dummyId, cellId);
+        const turnResult = threeGame.takeTurn(dummyId, cellId);
 
-        expect(success).toBe(true);
+        expect(turnResult.success).toBe(true);
     });
 
     test('returns false if not player\'s turn', () => {
@@ -111,9 +111,9 @@ describe('takeTurn', () => {
         const cellId = threeGame.board.rows[0][0].id;
 
         // Act
-        const success = threeGame.takeTurn(dummyId2, cellId);
+        const turnResult = threeGame.takeTurn(dummyId2, cellId);
 
-        expect(success).toBe(false);
+        expect(turnResult.success).toBe(false);
     });
 
     test('returns false if player not in game', () => {
@@ -123,9 +123,9 @@ describe('takeTurn', () => {
         const cellId = threeGame.board.rows[0][0].id;
 
         // Act
-        const success = threeGame.takeTurn(dummyId3, cellId);
+        const turnResult = threeGame.takeTurn(dummyId3, cellId);
 
-        expect(success).toBe(false);
+        expect(turnResult.success).toBe(false);
     });
 
     test('returns false if state is waiting', () => {
@@ -134,9 +134,9 @@ describe('takeTurn', () => {
         const cellId = threeGame.board.rows[0][0].id;
 
         // Act
-        const success = threeGame.takeTurn(dummyId, cellId);
+        const turnResult = threeGame.takeTurn(dummyId, cellId);
 
-        expect(success).toBe(false);
+        expect(turnResult.success).toBe(false);
     });
 
     test('toggles the turn to other player', () => {

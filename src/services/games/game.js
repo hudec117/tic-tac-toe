@@ -10,6 +10,8 @@ class Game {
         this.turn = '';
         this.board = new GameBoard(config);
 
+        this._config = config;
+
         this.SUPPORTED_PIECES = ['X', 'O'];
         this.MATCH = 3;
     }
@@ -29,6 +31,11 @@ class Game {
 
     takeTurn(playerId, cellId) {
         throw new Error('Not implemented.');
+    }
+
+    restartGame() {
+        this.state = 'playing';
+        this.board = new GameBoard(this._config);
     }
 
     whoWon() {

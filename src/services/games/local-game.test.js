@@ -78,18 +78,18 @@ describe('takeTurn', () => {
         const cellId = game.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId2, cellId);
+        const turnResult = game.takeTurn(dummyId2, cellId);
 
-        expect(success).toBe(false);
+        expect(turnResult.success).toBe(false);
     });
 
     test('returns false if state is waiting', () => {
         const cellId = game.board.rows[0][0].id;
 
         // Act
-        const success = game.takeTurn(dummyId, cellId);
+        const turnResult = game.takeTurn(dummyId, cellId);
 
-        expect(success).toBe(false);
+        expect(turnResult.success).toBe(false);
     });
 
     test('toggles the turn to other player', () => {

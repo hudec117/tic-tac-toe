@@ -26,18 +26,31 @@ class LocalGame extends Game {
     takeTurn(playerId, cellId) {
         const canTakeTurn = this.state === 'playing' && playerId === this._player;
         if (!canTakeTurn) {
-            return false;
+            return {
+                success: false,
+                won: ''
+            };
         }
 
         this.board.setCellValueById(cellId, this.turn);
 
+        // Rotate the turn
         if (this.turn === 'X') {
             this.turn = 'O';
         } else {
             this.turn = 'X';
         }
 
-        return true;
+        // Check if anyone has won
+        const won = this.whoWon();
+        if (won) {
+            this.state = 'ended';
+        }
+
+        return {
+            success: true,
+            won: won
+        };
     }
 
     toPublicObject() {
