@@ -50,7 +50,10 @@ class OnlineGame extends Game {
 
         const canTakeTurn = this.state === 'playing' && this.turn === playerPiece;
         if (!canTakeTurn) {
-            return false;
+            return {
+                success: false,
+                won: ''
+            };
         }
 
         // Update the cell value to the player's piece
@@ -64,7 +67,15 @@ class OnlineGame extends Game {
 
         this._playerOrder.push(lastPlayer);
 
-        return true;
+        const won = this.whoWon();
+        if (won) {
+            this.state = 'ended';
+        }
+
+        return {
+            success: true,
+            won: won
+        };
     }
 
     toPublicObject() {

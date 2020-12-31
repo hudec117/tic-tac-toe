@@ -1,5 +1,3 @@
-import EndGameDialog from '../components/end-game-dialog.mjs';
-
 export default {
     name: 'Game',
     template: /*html*/`
@@ -46,23 +44,13 @@ export default {
                     </div>
                 </div>
             </div>
-            <end-game-dialog v-bind:show="endGameDialog.show"
-                             v-bind:message="endGameDialog.message"
-                             v-on:back-to-menu="onBackToMenuClick"
-                             v-on:play-another-game="onPlayAnotherGameClick" />
         </div>
     `,
     props: ['initialGame'],
-    components: {
-        EndGameDialog
-    },
     data: function() {
         return {
             game: { ...this.initialGame },
-            endGameDialog: {
-                show: false,
-                message: ''
-            }
+            statusInfo: ''
         };
     },
     computed: {
@@ -81,19 +69,6 @@ export default {
         },
         canTakeTurn: function() {
             return this.game.state === 'playing' && this.isPlayerTurn;
-        },
-        statusInfo: function() {
-            if (this.game.type === 'online') {
-                if (this.game.state === 'waiting') {
-                    return 'Waiting for opponent';
-                } else if (this.isPlayerTurn) {
-                    return 'Your turn';
-                } else {
-                    return 'Opponent\'s turn';
-                }
-            } else if (this.game.type === 'local') {
-                return `${this.game.turn}'s turn`;
-            }
         }
     },
     created: function() {
@@ -103,14 +78,27 @@ export default {
     methods: {
         onGameUpdate: function(game) {
             this.game = game;
+
+            // Update the status info.
+            if (game.type === 'online') {
+                if (game.state === 'waiting') {
+                    this.statusInfo = 'Waiting for opponent';
+                } else if (this.isPlayerTurn) {
+                    this.statusInfo = 'Your turn';
+                } else {
+                    this.statusInfo = 'Opponent\'s turn';
+                }
+            } else if (game.type === 'local') {
+                this.statusInfo = `${game.turn}'s turn`;
+            }
         },
         onGameEnd: function(end) {
             if (end.reason === 'client-requested') {
-                this.showEndGameDialog('Your opponent has left the game, you automatically win!');
+                // TODO
             } else if (end.reason === 'client-won') {
-                this.showEndGameDialog(end.player + ' wins!');
+                this.statusInfo = end.player + ' wins!';
             } else if (end.reason === 'client-draw') {
-                this.showEndGameDialog('The game is a draw!');
+                this.statusInfo = 'The game is a draw!';
             }
         },
         onEndGameClick: function() {
@@ -129,25 +117,6 @@ export default {
                     }
                 });
             }
-        },
-        onBackToMenuClick: function() {
-            this.hideEndGameDialog();
-            Vue.nextTick(() => {
-                this.$store.dispatch('goToPage', 'MainMenu');
-            });
-        },
-        onPlayAnotherGameClick: function() {
-            this.hideEndGameDialog();
-
-            // TODO
-        },
-        showEndGameDialog: function(message) {
-            this.endGameDialog.show = true;
-            this.endGameDialog.message = message;
-        },
-        hideEndGameDialog: function() {
-            this.endGameDialog.show = false;
-            this.endGameDialog.message = '';
         },
         cellClasses: function(cell) {
             let classes = 'cell';
