@@ -1,35 +1,68 @@
+/* Author(s): Aurel Hudec
+ * Description: Vue component to display the game page.
+ */
+
 export default {
     name: 'Game',
     template: /*html*/`
         <div>
-            <div class="row justify-content-center mb-3">
-                <div class="col-auto form-inline">
+            <div class="form-row justify-content-center mb-3">
+                <div class="col-auto">
                     <button type="button"
-                            class="btn btn-lg btn-danger mr-4"
+                            class="btn btn-lg btn-danger"
                             v-on:click="onEndGameClick"
                             title="You will automatically lose the game">
-                        <i class="fas fa-arrow-left mr-1"></i> End Game
+                        <i class="fas fa-arrow-left mr-1"></i> Back
                     </button>
-
-                    <label for="inviteLink"
-                           class="col-form-label-lg mr-1"
-                           v-if="game.type === 'online'">
-                        Invite Link
-                    </label>
-                    <input id="inviteLink"
-                           class="form-control form-control-lg mr-4"
-                           type="text"
-                           v-bind:value="inviteLink"
-                           v-on:click="onInviteLinkClick"
-                           v-if="game.type === 'online'"
-                           readonly>
-
-                    <label for="statusInfo" class="col-form-label-lg mr-1">Status</label>
-                    <input id="statusInfo"
-                           class="form-control form-control-lg"
-                           type="text"
-                           v-bind:value="statusInfo"
-                           readonly>
+                </div>
+                <div class="col" v-if="game.type === 'online'">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Invite Link</div>
+                        </div>
+                        <input id="inviteLink"
+                               class="form-control form-control-lg"
+                               type="text"
+                               v-bind:value="inviteLink"
+                               v-on:click="onInviteLinkClick"
+                               readonly>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Status</div>
+                        </div>
+                        <input id="statusInfo"
+                               class="form-control form-control-lg"
+                               type="text"
+                               v-bind:value="statusInfo"
+                               readonly>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">X wins</div>
+                        </div>
+                        <input id="xWins"
+                               class="form-control form-control-lg"
+                               type="text"
+                               v-bind:value="game.scores['X']"
+                               readonly>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">O wins</div>
+                        </div>
+                        <input id="oWins"
+                               class="form-control form-control-lg"
+                               type="text"
+                               v-bind:value="game.scores['O']"
+                               readonly>
+                    </div>
                 </div>
             </div>
             <div class="row text-center">
@@ -57,8 +90,8 @@ export default {
         inviteLink: function() {
             return `${window.location.href}#${this.game.id}`;
         },
-        playerPiece: function() {
-            return this.game.players[this.$io.id];
+        scores: function() {
+            return `X: ${this.game.scores['X']} O: ${this.game.scores['O']}`;
         },
         isPlayerTurn: function() {
             if (this.game.type === 'online') {

@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Concrete implementation of Game for online games.
+ */
+
 const Game = require('./game.js');
 
 const shuffle = require('shuffle-array');

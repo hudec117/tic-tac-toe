@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Vuex store to manage which page the app displays and alert management.
+ */
+
 export default new Vuex.Store({
     strict: true,
     state: {

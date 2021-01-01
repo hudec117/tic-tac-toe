@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Base class defining the structure of a game. This class is abstract.
+ */
+
 const GameBoard = require('../game-board.js');
 
 const Random = require('random-js').Random;

@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Server initialisation.
+ */
+
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);

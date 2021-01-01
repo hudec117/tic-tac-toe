@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Concrete implementation of Game class for local games.
+ */
+
 const Game = require('./game.js');
 
 class LocalGame extends Game {
