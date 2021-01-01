@@ -4,16 +4,20 @@ const Random = require('random-js').Random;
 
 class Game {
     constructor(config) {
+        this.SUPPORTED_PIECES = ['X', 'O'];
+        this.MATCH = 3;
+
         this.id = this._generateGameId();
         this.type = config.type;
         this.state = 'waiting';
         this.turn = '';
         this.board = new GameBoard(config);
+        this.scores = this.SUPPORTED_PIECES.reduce((scores, piece) => {
+            scores[piece] = 0;
+            return scores;
+        }, {});
 
         this._config = config;
-
-        this.SUPPORTED_PIECES = ['X', 'O'];
-        this.MATCH = 3;
     }
 
     _generateGameId() {

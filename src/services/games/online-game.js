@@ -70,6 +70,10 @@ class OnlineGame extends Game {
         const won = this.whoWon();
         if (won) {
             this.state = 'ended';
+
+            if (won !== 'draw') {
+                this.scores[won]++;
+            }
         }
 
         return {
@@ -85,6 +89,7 @@ class OnlineGame extends Game {
             state: this.state,
             players: Object.fromEntries(this._playerPieceLookup),
             turn: this.turn,
+            scores: this.scores,
             board: this.board.toPublicObject()
         };
     }

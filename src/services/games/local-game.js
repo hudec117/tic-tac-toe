@@ -45,6 +45,10 @@ class LocalGame extends Game {
         const won = this.whoWon();
         if (won) {
             this.state = 'ended';
+
+            if (won !== 'draw') {
+                this.scores[won]++;
+            }
         }
 
         return {
@@ -60,6 +64,7 @@ class LocalGame extends Game {
             state: this.state,
             players: [this._player],
             turn: this.turn,
+            scores: this.scores,
             board: this.board.toPublicObject()
         };
     }

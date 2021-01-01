@@ -74,23 +74,14 @@ export default {
     created: function() {
         this.$io.on('game-update', this.onGameUpdate);
         this.$io.on('game-end', this.onGameEnd);
+
+        this.updateStatusInfo(this.game);
     },
     methods: {
         onGameUpdate: function(game) {
             this.game = game;
 
-            // Update the status info.
-            if (game.type === 'online') {
-                if (game.state === 'waiting') {
-                    this.statusInfo = 'Waiting for opponent';
-                } else if (this.isPlayerTurn) {
-                    this.statusInfo = 'Your turn';
-                } else {
-                    this.statusInfo = 'Opponent\'s turn';
-                }
-            } else if (game.type === 'local') {
-                this.statusInfo = `${game.turn}'s turn`;
-            }
+            this.updateStatusInfo(game);
         },
         onGameEnd: function(end) {
             if (end.reason === 'client-requested') {
@@ -116,6 +107,19 @@ export default {
                         this.$store.dispatch('showAlert', `Cannot take turn because: ${res.message}`);
                     }
                 });
+            }
+        },
+        updateStatusInfo(game) {
+            if (game.type === 'online') {
+                if (game.state === 'waiting') {
+                    this.statusInfo = 'Waiting for opponent';
+                } else if (this.isPlayerTurn) {
+                    this.statusInfo = 'Your turn';
+                } else {
+                    this.statusInfo = 'Opponent\'s turn';
+                }
+            } else if (game.type === 'local') {
+                this.statusInfo = `${game.turn}'s turn`;
             }
         },
         cellClasses: function(cell) {
