@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Vue root initialisation.
+ */
+
 import App from './app.mjs';
 import store from './store.mjs';
 

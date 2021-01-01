@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Vue component to display the board selection page.
+ */
+
 export default {
     name: 'BoardSelect',
     template: /*html*/`

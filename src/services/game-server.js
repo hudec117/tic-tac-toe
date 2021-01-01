@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: The class handling all communications between the client and server.
+ */
+
 const OnlineGame = require('./games/online-game.js');
 const LocalGame = require('./games/local-game.js');
 

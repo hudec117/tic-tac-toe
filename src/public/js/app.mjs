@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Root Vue component that manages displaying different pages and handles events from pages.
+ */
+
 import MainMenu from './pages/main-menu.mjs';
 import Settings from './pages/settings.mjs';
 import BoardSelect from './pages/board-select.mjs';

@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Concrete implementation of Game for online games.
+ */
+
 const Game = require('./game.js');
 
 const shuffle = require('shuffle-array');
@@ -70,6 +74,10 @@ class OnlineGame extends Game {
         const won = this.whoWon();
         if (won) {
             this.state = 'ended';
+
+            if (won !== 'draw') {
+                this.scores[won]++;
+            }
         }
 
         return {
@@ -85,6 +93,7 @@ class OnlineGame extends Game {
             state: this.state,
             players: Object.fromEntries(this._playerPieceLookup),
             turn: this.turn,
+            scores: this.scores,
             board: this.board.toPublicObject()
         };
     }

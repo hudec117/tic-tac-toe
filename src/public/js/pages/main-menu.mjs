@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Vue component to display the main menu page.
+ */
+
 export default {
     name: 'MainMenu',
     template: /*html*/`
