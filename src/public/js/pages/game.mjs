@@ -10,7 +10,7 @@ export default {
                 <div class="col-auto">
                     <button type="button"
                             class="btn btn-lg btn-danger"
-                            v-on:click="onEndGameClick"
+                            v-on:click="onBackClick"
                             title="You will automatically lose the game">
                         <i class="fas fa-arrow-left mr-1"></i> Back
                     </button>
@@ -90,9 +90,6 @@ export default {
         inviteLink: function() {
             return `${window.location.href}#${this.game.id}`;
         },
-        scores: function() {
-            return `X: ${this.game.scores['X']} O: ${this.game.scores['O']}`;
-        },
         isPlayerTurn: function() {
             if (this.game.type === 'online') {
                 return this.playerPiece === this.game.turn;
@@ -118,14 +115,15 @@ export default {
         },
         onGameEnd: function(end) {
             if (end.reason === 'client-requested') {
-                // TODO
+                // TODO: inform user of opponent leaving
+                this.$store.dispatch('goToPage', 'MainMenu');
             } else if (end.reason === 'client-won') {
                 this.statusInfo = end.player + ' wins!';
             } else if (end.reason === 'client-draw') {
                 this.statusInfo = 'The game is a draw!';
             }
         },
-        onEndGameClick: function() {
+        onBackClick: function() {
             this.$io.emit('game-end', () => {
                 this.$store.dispatch('goToPage', 'MainMenu');
             });
