@@ -7,58 +7,58 @@ export default {
     template: /*html*/`
         <div>
             <div class="form-row justify-content-center mb-3">
-                <div class="col-auto">
+                <div class="col-12 col-lg-auto">
                     <button type="button"
-                            class="btn btn-lg btn-danger"
+                            class="btn btn-lg btn-block btn-danger"
                             v-on:click="onBackClick"
                             title="You will automatically lose the game">
                         <i class="fas fa-arrow-left mr-1"></i> Back
                     </button>
                 </div>
-                <div class="col" v-if="game.type === 'online'">
-                    <div class="input-group">
+                <div class="col-12 col-lg-12" v-if="game.type === 'online'">
+                    <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">Invite Link</div>
+                            <div class="input-group-text">Invite</div>
                         </div>
-                        <input id="inviteLink"
-                               class="form-control form-control-lg"
+                        <input id="invite"
+                               class="form-control"
                                type="text"
-                               v-bind:value="inviteLink"
-                               v-on:click="onInviteLinkClick"
+                               v-bind:value="invite"
+                               v-on:click="onInviteClick"
                                readonly>
                     </div>
                 </div>
-                <div class="col-3">
-                    <div class="input-group">
+                <div class="col-12 col-lg-3">
+                    <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Status</div>
                         </div>
                         <input id="statusInfo"
-                               class="form-control form-control-lg"
+                               class="form-control"
                                type="text"
                                v-bind:value="statusInfo"
                                readonly>
                     </div>
                 </div>
-                <div class="col-2">
-                    <div class="input-group">
+                <div class="col-6 col-lg-2">
+                    <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">X wins</div>
                         </div>
                         <input id="xWins"
-                               class="form-control form-control-lg"
+                               class="form-control"
                                type="text"
                                v-bind:value="game.scores['X']"
                                readonly>
                     </div>
                 </div>
-                <div class="col-2">
-                    <div class="input-group">
+                <div class="col-6 col-lg-2">
+                    <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">O wins</div>
                         </div>
                         <input id="oWins"
-                               class="form-control form-control-lg"
+                               class="form-control"
                                type="text"
                                v-bind:value="game.scores['O']"
                                readonly>
@@ -67,6 +67,7 @@ export default {
             </div>
             <div class="row text-center">
                 <div class="col">
+                    <p>Match 3 to win!</p>
                     <div class="d-inline-flex flex-column">
                         <div class="row d-flex flex-row" v-for="row of game.board">
                             <div v-for="cell of row" v-bind:class="cellClasses(cell)" v-on:click="onCellClick(cell)">
@@ -87,8 +88,11 @@ export default {
         };
     },
     computed: {
-        inviteLink: function() {
+        invite: function() {
             return `${window.location.href}#${this.game.id}`;
+        },
+        playerPiece: function() {
+            return this.game.players[this.$io.id];
         },
         isPlayerTurn: function() {
             if (this.game.type === 'online') {
@@ -128,7 +132,7 @@ export default {
                 this.$store.dispatch('goToPage', 'MainMenu');
             });
         },
-        onInviteLinkClick: function(event) {
+        onInviteClick: function(event) {
             event.target.setSelectionRange(0, event.target.value.length);
         },
         onCellClick: function(cell) {
@@ -143,7 +147,7 @@ export default {
         updateStatusInfo(game) {
             if (game.type === 'online') {
                 if (game.state === 'waiting') {
-                    this.statusInfo = 'Waiting for opponent';
+                    this.statusInfo = 'Waiting for player';
                 } else if (this.isPlayerTurn) {
                     this.statusInfo = 'Your turn';
                 } else {
