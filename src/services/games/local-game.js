@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Concrete implementation of Game class for local games.
+ */
+
 const Game = require('./game.js');
 
 class LocalGame extends Game {
@@ -26,18 +30,35 @@ class LocalGame extends Game {
     takeTurn(playerId, cellId) {
         const canTakeTurn = this.state === 'playing' && playerId === this._player;
         if (!canTakeTurn) {
-            return false;
+            return {
+                success: false,
+                won: ''
+            };
         }
 
         this.board.setCellValueById(cellId, this.turn);
 
+        // Rotate the turn
         if (this.turn === 'X') {
             this.turn = 'O';
         } else {
             this.turn = 'X';
         }
 
-        return true;
+        // Check if anyone has won
+        const won = this.whoWon();
+        if (won) {
+            this.state = 'ended';
+
+            if (won !== 'draw') {
+                this.scores[won]++;
+            }
+        }
+
+        return {
+            success: true,
+            won: won
+        };
     }
 
     toPublicObject() {
@@ -47,6 +68,7 @@ class LocalGame extends Game {
             state: this.state,
             players: [this._player],
             turn: this.turn,
+            scores: this.scores,
             board: this.board.toPublicObject()
         };
     }

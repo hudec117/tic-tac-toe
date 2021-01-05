@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Vue component to show an alert with a message.
+ */
+
 export default {
     name: 'Alert',
     template: /*html*/`

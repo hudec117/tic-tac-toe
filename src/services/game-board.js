@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Class to generate and represent the board.
+ */
+
 const { v4: uuidv4 } = require('uuid');
 
 class GameBoard {

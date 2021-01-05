@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: Custom CSS for the game.
+ */
+
 .cell {
     height: 15vh;
     width: 15vh;
@@ -19,18 +23,22 @@
     height: inherit;
 }
 
+/* Top row of cells */
 .row:first-child > .cell {
     margin-top: 0;
 }
 
+/* Bottom row of cells */
 .row:last-child > .cell {
     margin-bottom: 0;
 }
 
+/* First column of cells */
 .row > .cell:first-child {
     margin-left: 0;
 }
 
+/* Last columns of cells */
 .row > .cell:last-child {
     margin-right: 0;
 }

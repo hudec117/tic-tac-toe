@@ -1,17 +1,27 @@
+/* Author(s): Aurel Hudec
+ * Description: Base class defining the structure of a game. This class is abstract.
+ */
+
 const GameBoard = require('../game-board.js');
 
 const Random = require('random-js').Random;
 
 class Game {
     constructor(config) {
+        this.SUPPORTED_PIECES = ['X', 'O'];
+        this.MATCH = 3;
+
         this.id = this._generateGameId();
         this.type = config.type;
         this.state = 'waiting';
         this.turn = '';
         this.board = new GameBoard(config);
+        this.scores = this.SUPPORTED_PIECES.reduce((scores, piece) => {
+            scores[piece] = 0;
+            return scores;
+        }, {});
 
-        this.SUPPORTED_PIECES = ['X', 'O'];
-        this.MATCH = 3;
+        this._config = config;
     }
 
     _generateGameId() {
@@ -29,6 +39,11 @@ class Game {
 
     takeTurn(playerId, cellId) {
         throw new Error('Not implemented.');
+    }
+
+    restartGame() {
+        this.state = 'playing';
+        this.board = new GameBoard(this._config);
     }
 
     whoWon() {

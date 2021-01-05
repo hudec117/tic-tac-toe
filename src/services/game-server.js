@@ -1,3 +1,7 @@
+/* Author(s): Aurel Hudec
+ * Description: The class handling all communications between the client and server.
+ */
+
 const OnlineGame = require('./games/online-game.js');
 const LocalGame = require('./games/local-game.js');
 
@@ -126,26 +130,29 @@ class GameServer {
         }
 
         // Take the turn
-        const turnSuccessful = game.takeTurn(playerId, cellId);
-        if (turnSuccessful) {
+        const turnResult = game.takeTurn(playerId, cellId);
+        if (turnResult.success) {
+            this._broadcastGameToRoom(game);
+
             // Check if anyone has won the game
-            const won = game.whoWon();
-            if (won) {
-                if (won === 'draw') {
+            if (turnResult.won) {
+                if (turnResult.won === 'draw') {
                     this._io.in(game.id).emit('game-end', {
                         reason: 'client-draw'
                     });
                 } else {
                     this._io.in(game.id).emit('game-end', {
                         reason: 'client-won',
-                        player: won
+                        player: turnResult.won
                     });
                 }
 
-                this._cleanupGame(game);
+                // Restart the board and broadcast it after 2 seconds.
+                setTimeout(() => {
+                    game.restartGame();
+                    this._broadcastGameToRoom(game);
+                }, 2000);
             }
-
-            this._broadcastGameToRoom(game);
 
             return this._createSuccessResponse();
         } else {
