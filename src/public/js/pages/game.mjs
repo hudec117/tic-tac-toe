@@ -7,15 +7,15 @@ export default {
     template: /*html*/`
         <div>
             <div class="form-row justify-content-center mb-3">
-                <div class="col-12 col-lg-auto">
+                <div class="col-auto">
                     <button type="button"
-                            class="btn btn-lg btn-block btn-danger"
+                            class="btn btn-lg btn-danger"
                             v-on:click="onBackClick"
                             title="You will automatically lose the game">
                         <i class="fas fa-arrow-left mr-1"></i> Back
                     </button>
                 </div>
-                <div class="col-12 col-lg-12" v-if="game.type === 'online'">
+                <div class="col" v-if="game.type === 'online'">
                     <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Invite</div>
@@ -28,7 +28,7 @@ export default {
                                readonly>
                     </div>
                 </div>
-                <div class="col-12 col-lg-3">
+                <div class="col-3">
                     <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Status</div>
@@ -40,7 +40,7 @@ export default {
                                readonly>
                     </div>
                 </div>
-                <div class="col-6 col-lg-2">
+                <div class="col-2">
                     <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">X wins</div>
@@ -52,7 +52,7 @@ export default {
                                readonly>
                     </div>
                 </div>
-                <div class="col-6 col-lg-2">
+                <div class="col-2">
                     <div class="input-group input-group-lg">
                         <div class="input-group-prepend">
                             <div class="input-group-text">O wins</div>
