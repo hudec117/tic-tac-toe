@@ -22,12 +22,26 @@ class GameServer {
     }
 
     _onClientDisconnect(socket, reason) {
-        // TODO: handle terminating games for player
+        const playerId = socket.id;
+
+        // Handle player being in a game
+        const game = this._getPlayersGame(playerId);
+        if (game !== null) {
+            // Broadcast to the remaining client's in the room that the game has been terminated
+            // due to a player disconnecting.
+            this._io.in(game.id).emit('game-end', {
+                reason: 'client-disconnected'
+            });
+
+            // Delete the game from lookup
+            this._gameLookup.delete(game.id);
+
+            // Delete the game room
+            this._deleteRoom(game.id);
+        }
     }
 
     _onClientNewGameRequest(socket, config) {
-        // TODO: argument defense
-
         const playerId = socket.id;
 
         // Check if player is already in a game
@@ -46,6 +60,7 @@ class GameServer {
         // Add the player to the game
         newGame.addPlayer(playerId);
 
+        // Add the new game to the lookup
         this._gameLookup.set(newGame.id, newGame);
 
         // Add the socket to the game's room.
@@ -69,16 +84,20 @@ class GameServer {
             return this._createFailureResponse('Player is not in a game.');
         }
 
-        this._cleanupGame(game);
+        // Delete the game from lookup
+        this._gameLookup.delete(game.id);
 
         // Remove the socket from the game room
         socket.leave(game.id);
 
         // Broadcast to the remaining client's in the room that the game has been terminated
-        // due to a client leaving.
+        // due to a player leaving.
         this._io.in(game.id).emit('game-end', {
             reason: 'client-requested'
         });
+
+        // Delete the game room
+        this._deleteRoom(game.id);
 
         return this._createSuccessResponse();
     }
@@ -119,8 +138,6 @@ class GameServer {
     }
 
     _onClientGameTakeTurn(socket, cellId) {
-        // TODO: argument defense
-
         const playerId = socket.id;
 
         // Find the player's game
@@ -160,16 +177,6 @@ class GameServer {
         }
     }
 
-    _cleanupGame(game) {
-        this._gameLookup.delete(game.id);
-
-        // TODO: handle socket cleanup
-        // const sockets = this._io.sockets.adapter.rooms[game.id].sockets;
-        // for (const socket in sockets) {
-            
-        // }
-    }
-
     _getPlayersGame(playerId) {
         for (const game of this._gameLookup.values()) {
             if (game.hasPlayer(playerId)) {
@@ -182,6 +189,16 @@ class GameServer {
 
     _broadcastGameToRoom(game) {
         this._io.in(game.id).emit('game-update', game.toPublicObject());
+    }
+
+    _deleteRoom(room) {
+        const self = this;
+        this._io.sockets.in(room).clients((error, socketIds) => {
+            for (const socketId of socketIds) {
+                console.log(`${socketId} removed from ${room}`);
+                self._io.sockets.sockets[socketId].leave(room);
+            }
+        });
     }
 
     _createSuccessResponse() {
