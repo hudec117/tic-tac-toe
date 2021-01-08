@@ -119,8 +119,17 @@ export default {
         },
         onGameEnd: function(end) {
             if (end.reason === 'client-requested') {
-                // TODO: inform user of opponent leaving
-                this.$store.dispatch('goToPage', 'MainMenu');
+                this.$store.dispatch('showAlert', 'Your opponent forfeited.');
+                this.$store.dispatch('goToPage', {
+                    page: 'MainMenu',
+                    keepAlert: true
+                });
+            } else if (end.reason === 'client-disconnected') {
+                this.$store.dispatch('showAlert', 'Your opponent disconnected.');
+                this.$store.dispatch('goToPage', {
+                    page: 'MainMenu',
+                    keepAlert: true
+                });
             } else if (end.reason === 'client-won') {
                 this.statusInfo = end.player + ' wins!';
             } else if (end.reason === 'client-draw') {
@@ -129,7 +138,7 @@ export default {
         },
         onBackClick: function() {
             this.$io.emit('game-end', () => {
-                this.$store.dispatch('goToPage', 'MainMenu');
+                this.$store.dispatch('goToPage', { page: 'MainMenu' });
             });
         },
         onInviteClick: function(event) {

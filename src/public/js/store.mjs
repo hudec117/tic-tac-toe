@@ -21,10 +21,12 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        goToPage(context, newPage) {
-            context.commit('setPage', newPage);
+        goToPage(context, { page, keepAlert = false }) {
+            context.commit('setPage', page);
 
-            context.dispatch('hideAlert');
+            if (!keepAlert) {
+                context.dispatch('hideAlert');
+            }
         },
         showAlert(context, message) {
             context.commit('setAlert', {

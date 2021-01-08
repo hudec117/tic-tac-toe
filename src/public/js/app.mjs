@@ -44,6 +44,13 @@ export default {
                       v-bind:initial-game="initialGame">
                 </game>
             </div>
+
+            <div class="row mt-4 text-center">
+                <div class="col">
+                    <p>For the best experience, please use latest Chrome or Firefox.</p>
+                    <p>Made with &#10084;&#65039; by The Blue Group</p>
+                </div>
+            </div>
         </div>
     `,
     components: {
@@ -77,11 +84,11 @@ export default {
     methods: {
         onPlayOnlineClick: function() {
             this.gameType = 'online';
-            this.$store.dispatch('goToPage', 'BoardSelect');
+            this.$store.dispatch('goToPage', { page: 'BoardSelect' });
         },
         onPlayLocallyClick: function() {
             this.gameType = 'local';
-            this.$store.dispatch('goToPage', 'BoardSelect');
+            this.$store.dispatch('goToPage', { page: 'BoardSelect' });
         },
         onBoardSelected: function(size) {
             this.$io.emit('game-create', {
@@ -90,7 +97,7 @@ export default {
             }, res => {
                 if (res.success) {
                     this.initialGame = res.game;
-                    this.$store.dispatch('goToPage', 'Game');
+                    this.$store.dispatch('goToPage', { page: 'Game' });
                 } else {
                     this.$store.dispatch('showAlert', `Cannot create game because: ${res.message}`);
                 }
@@ -107,7 +114,7 @@ export default {
                 this.$io.emit('game-join', gameId, res => {
                     if (res.success) {
                         this.initialGame = res.game;
-                        this.$store.dispatch('goToPage', 'Game');
+                        this.$store.dispatch('goToPage', { page: 'Game' });
                     } else {
                         this.$store.dispatch('showAlert', `Cannot join game because: ${res.message}`);
                     }
