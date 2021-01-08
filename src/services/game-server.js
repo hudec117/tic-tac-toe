@@ -195,7 +195,6 @@ class GameServer {
         const self = this;
         this._io.sockets.in(room).clients((error, socketIds) => {
             for (const socketId of socketIds) {
-                console.log(`${socketId} removed from ${room}`);
                 self._io.sockets.sockets[socketId].leave(room);
             }
         });

@@ -44,6 +44,13 @@ export default {
                       v-bind:initial-game="initialGame">
                 </game>
             </div>
+
+            <div class="row mt-4 text-center">
+                <div class="col">
+                    <p>For the best experience, please use latest Chrome or Firefox.</p>
+                    <p>Made with &#10084;&#65039; by The Blue Group</p>
+                </div>
+            </div>
         </div>
     `,
     components: {
