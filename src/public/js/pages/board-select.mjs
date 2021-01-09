@@ -41,7 +41,7 @@ export default {
             this.$emit('selected', 4);
         },
         onBackClick: function() {
-            this.$store.dispatch('goToPage', 'MainMenu');
+            this.$store.dispatch('goToPage', { page: 'MainMenu' });
         }
     }
 };
