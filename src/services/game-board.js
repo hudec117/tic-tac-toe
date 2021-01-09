@@ -30,6 +30,17 @@ class GameBoard {
             }
             this.rows.push(row);
         }
+
+        // Randomly block cells in the board
+
+        // One blocked cell per size over 3x3
+        const numBlockedCells = (this.size - 3) * 2;
+        for (let i = 0; i < numBlockedCells; i++) {
+            const randomRow = Math.floor(Math.random() * this.size);
+            const randomColumn = Math.floor(Math.random() * this.size);
+
+            this.rows[randomRow][randomColumn].value = 'block';
+        }
     }
 
     getCellById(id) {
