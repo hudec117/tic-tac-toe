@@ -73,6 +73,7 @@ export default {
                             <div v-for="cell of row" v-bind:class="cellClasses(cell)" v-on:click="onCellClick(cell)">
                                 <img v-if="cell.value === 'X'" src="img/cross.png" />
                                 <img v-if="cell.value === 'O'" src="img/nought.png" />
+                                <img v-if="cell.value === 'block'" src="img/block.png" />
                             </div>
                         </div>
                     </div>
