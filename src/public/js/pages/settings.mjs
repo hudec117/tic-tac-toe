@@ -27,8 +27,6 @@ export default {
         return {
             soundEffects: false,
         };
-
-
     },
     mounted: function () {
         var soundEffects = localStorage.getItem('soundEffects')
@@ -49,15 +47,9 @@ export default {
             this.soundEffects = e.currentTarget.checked
             if (this.soundEffects === true) {
                 localStorage.setItem('soundEffects', true);
-            }
-            else {
+            } else {
                 localStorage.setItem('soundEffects', false);
             }
         }
-
-
     }
-
-
-
 };

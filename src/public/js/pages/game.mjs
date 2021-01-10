@@ -119,7 +119,6 @@ export default {
             this.updateStatusInfo(game);
         },
         onGameEnd: function (end) {
-
             var winSound = new Audio("\\audio/win.mp3");
             var looseSound = new Audio("\\audio/loss.wav");
             var soundEffects = localStorage.getItem('soundEffects');
@@ -141,25 +140,19 @@ export default {
             } else if (end.reason === 'client-won') {
                 if (soundEffects === 'true') {
                     this.statusInfo = end.player + ' wins!';
-                }
-                else {
+                } else {
                     if (this.game.type === 'online') {
                         if (this.playerPiece === end.player) {
                             winSound.play();
                             this.statusInfo = end.player + ' wins!'
-                        }
-                        else {
+                        } else {
                             looseSound.play();
                             this.statusInfo = end.player + ' wins!'
                         }
-
-                    }
-                    else {
+                    } else {
                         winSound.play();
                     }
                 }
-
-
             } else if (end.reason === 'client-draw') {
                 looseSound.play();
                 this.statusInfo = 'The game is a draw!';
