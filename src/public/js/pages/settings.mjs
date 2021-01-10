@@ -9,9 +9,9 @@ export default {
             Settings
         </div>
     `,
-    data: function() {
-        return {
-            
-        };
+    methods: {
+        onBackClick: function() {
+            this.$store.dispatch('goToPage', { page: 'MainMenu' });
+        }
     }
 };
