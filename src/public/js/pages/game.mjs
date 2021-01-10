@@ -119,12 +119,15 @@ export default {
             this.updateStatusInfo(game);
         },
         onGameEnd: function(end) {
+            var winSound = new Audio("\\audio/1_person_cheering-Jett_Rifkin-1851518140.mp3");
+            var looseSound = new Audio("\\audio/341732__sgtpepperarc360__wrong-answer.wav");
             if (end.reason === 'client-requested') {
                 this.$store.dispatch('showAlert', 'Your opponent forfeited.');
                 this.$store.dispatch('goToPage', {
                     page: 'MainMenu',
                     keepAlert: true
                 });
+
             } else if (end.reason === 'client-disconnected') {
                 this.$store.dispatch('showAlert', 'Your opponent disconnected.');
                 this.$store.dispatch('goToPage', {
@@ -132,8 +135,21 @@ export default {
                     keepAlert: true
                 });
             } else if (end.reason === 'client-won') {
-                this.statusInfo = end.player + ' wins!';
+                if(this.game.type === 'online'){
+                    if(this.playerPiece === end.player){
+                        winSound.play();
+                        this.statusInfo = end.player + ' wins!';
+                    }
+                    else{
+                        looseSound.play();
+                        this.statusInfo = end.player + ' wins'};
+                    }
+                else{
+                    winSound.play();
+                    this.statusInfo = end.player + ' wins!';
+                }
             } else if (end.reason === 'client-draw') {
+                looseSound.play();
                 this.statusInfo = 'The game is a draw!';
             }
         },
