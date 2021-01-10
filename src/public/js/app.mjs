@@ -31,7 +31,8 @@ export default {
             <div class="mt-3">
                 <main-menu v-if="page === 'MainMenu'"
                            v-on:play-online="onPlayOnlineClick"
-                           v-on:play-locally="onPlayLocallyClick">
+                           v-on:play-locally="onPlayLocallyClick"
+                           v-on:settings="onSettingsClick">
                 </main-menu>
 
                 <settings v-if="page === 'Settings'"></settings>
@@ -47,7 +48,7 @@ export default {
 
             <div class="row mt-4 text-center">
                 <div class="col">
-                    <p>For the best experience, please use latest Chrome or Firefox.</p>
+                    <p>For the best experience, please use latest Chrome, Firefox or Edge.</p>
                     <p>Made with &#10084;&#65039; by The Blue Group</p>
                 </div>
             </div>
@@ -89,6 +90,9 @@ export default {
         onPlayLocallyClick: function() {
             this.gameType = 'local';
             this.$store.dispatch('goToPage', { page: 'BoardSelect' });
+        },
+        onSettingsClick: function() {
+            this.$store.dispatch('goToPage', { page: 'Settings' });
         },
         onBoardSelected: function(size) {
             this.$io.emit('game-create', {

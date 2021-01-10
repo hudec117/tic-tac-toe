@@ -1,4 +1,4 @@
-/* Author(s): Aurel Hudec
+/* Author(s): Aurel Hudec, Aidan Briggs
  * Description: Vue component to display the game page.
  */
 
@@ -82,70 +82,91 @@ export default {
         </div>
     `,
     props: ['initialGame'],
-    data: function() {
+    data: function () {
         return {
             game: { ...this.initialGame },
             statusInfo: ''
         };
     },
     computed: {
-        invite: function() {
+        invite: function () {
             return `${window.location.href}#${this.game.id}`;
         },
-        playerPiece: function() {
+        playerPiece: function () {
             return this.game.players[this.$io.id];
         },
-        isPlayerTurn: function() {
+        isPlayerTurn: function () {
             if (this.game.type === 'online') {
                 return this.playerPiece === this.game.turn;
             } else if (this.game.type === 'local') {
                 return true;
             }
         },
-        canTakeTurn: function() {
+        canTakeTurn: function () {
             return this.game.state === 'playing' && this.isPlayerTurn;
         }
     },
-    created: function() {
+    created: function () {
         this.$io.on('game-update', this.onGameUpdate);
         this.$io.on('game-end', this.onGameEnd);
 
         this.updateStatusInfo(this.game);
     },
     methods: {
-        onGameUpdate: function(game) {
+        onGameUpdate: function (game) {
             this.game = game;
 
             this.updateStatusInfo(game);
         },
-        onGameEnd: function(end) {
+        onGameEnd: function (end) {
+            var winSound = new Audio("\\audio/win.mp3");
+            var looseSound = new Audio("\\audio/loss.wav");
+            var soundEffects = localStorage.getItem('soundEffects');
+
             if (end.reason === 'client-requested') {
                 this.$store.dispatch('showAlert', 'Your opponent forfeited.');
                 this.$store.dispatch('goToPage', {
                     page: 'MainMenu',
                     keepAlert: true
                 });
+
             } else if (end.reason === 'client-disconnected') {
                 this.$store.dispatch('showAlert', 'Your opponent disconnected.');
                 this.$store.dispatch('goToPage', {
                     page: 'MainMenu',
                     keepAlert: true
                 });
+
             } else if (end.reason === 'client-won') {
-                this.statusInfo = end.player + ' wins!';
+                if (soundEffects === 'true') {
+                    this.statusInfo = end.player + ' wins!';
+                } else {
+                    if (this.game.type === 'online') {
+                        if (this.playerPiece === end.player) {
+                            winSound.play();
+                            this.statusInfo = end.player + ' wins!'
+                        } else {
+                            looseSound.play();
+                            this.statusInfo = end.player + ' wins!'
+                        }
+                    } else {
+                        winSound.play();
+                    }
+                }
             } else if (end.reason === 'client-draw') {
+                looseSound.play();
                 this.statusInfo = 'The game is a draw!';
             }
         },
-        onBackClick: function() {
+        onBackClick: function () {
             this.$io.emit('game-end', () => {
                 this.$store.dispatch('goToPage', { page: 'MainMenu' });
             });
         },
-        onInviteClick: function(event) {
+        onInviteClick: function (event) {
             event.target.setSelectionRange(0, event.target.value.length);
         },
-        onCellClick: function(cell) {
+        onCellClick: function (cell) {
             if (this.canTakeTurn && !cell.value) {
                 this.$io.emit('game-take-turn', cell.id, res => {
                     if (!res.success) {
@@ -167,7 +188,7 @@ export default {
                 this.statusInfo = `${game.turn}'s turn`;
             }
         },
-        cellClasses: function(cell) {
+        cellClasses: function (cell) {
             let classes = 'cell';
 
             if (this.canTakeTurn && !cell.value) {
