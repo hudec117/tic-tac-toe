@@ -18,7 +18,7 @@ export default {
             </div>
             <div class="row">
                 <div class="col">
-                    <button type="button" class="btn btn-lg btn-secondary" disabled>
+                    <button type="button" class="btn btn-lg btn-secondary" v-on:click="onSettingsClick">
                         Settings
                         <i class="fas fa-tools ml-1"></i>
                     </button>
@@ -32,6 +32,9 @@ export default {
         },
         onPlayLocallyClick: function() {
             this.$emit('play-locally');
+        },
+        onSettingsClick: function() {
+            this.$emit('settings');
         }
     }
 };
