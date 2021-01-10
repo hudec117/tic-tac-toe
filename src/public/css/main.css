@@ -1,4 +1,4 @@
-/* Author(s): Aurel Hudec
+/* Author(s): Aurel Hudec, Aidan Briggs
  * Description: Custom CSS for the game.
  */
 
@@ -41,4 +41,8 @@
 /* Last columns of cells */
 .row > .cell:last-child {
     margin-right: 0;
+}
+.options{
+    text-align : center;
+    font-size: 20px;
 }
